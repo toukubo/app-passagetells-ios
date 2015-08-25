@@ -25,16 +25,6 @@ import AVFoundation
 class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralDelegate {
     
     @IBOutlet weak var status: UILabel!
-    /*D/ @IBOutlet weak var uuid: UILabel!
-    @IBOutlet weak var major: UILabel!
-    @IBOutlet weak var minor: UILabel!
-    @IBOutlet weak var accuracy: UILabel!
-    @IBOutlet weak var rssi: UILabel!
-    @IBOutlet weak var distance: UILabel!
-    @IBOutlet weak var colour: UILabel!
-    @IBOutlet weak var beaconlist: UITextView!
-    @IBOutlet weak var errlog: UITextView!
-    */
     
     //UUID -> NSUUID
     let proximityUUID = NSUUID(UUIDString:"B9407F30-F5F8-466E-AFF9-25556B57FE6D")
@@ -43,18 +33,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
 
     
     //Estimote Beacon IDs & positions
-    
-    //Brixton Version 1
-    //let beaconID = ["1825838689":1, "1340030102":2, "1340030103":3, "1340030104":4, "1340030105":5, "1340030106":6, "1340030107":7, "5793654130":8, "2809715146":9 ]
-    
-    //Brixton Version 2
-    //let beaconID = ["1340038689":1, "1340030102":2, "1340030103":3, "1340030104":4, "1340030105":5, "1340030106":6, "1340030107":7, "1340030108":8, "1340010769":9 ]
-
-    //Brixton Version 3
-    //let beaconID = ["1340030110":1, "1340030102":2, "1340030103":3, "1340030104":4, "1340030105":5, "1340030106":6, "1340030107":7, "1340030108":8, "1340030111":9 ]
-
-    //Edinburgh Version 1
-    //var beaconID = ["1340030201":1, "1340030202":2, "1340030203":3, "1340030204":4, "1340030205":5, "1340030206":6, "1340030207":7, "1340030208":8, "1340030209":9, "1340030210":10, "1340030211":11, "1340030212":12, "1340030213":13, "1340030214":14, "1340030215":15, "1340030216":16, "1340030217":17, "1340030218":18, "1340030219":19, "1340030220":20, "1340030221":21, "1340030222":22, "1340030223":23, "1340030224":24, "version":100]
 
     //Edinburgh Version 1.1
     var beaconID = ["1340030201":1, "1340030202":2, "1340030203":3, "1340030204":4, "1340030205":5, "1340030206":6, "1340030207":7, "1340030208":8, "1340030209":9, "1340030210":10, "1340030211":11, "1340030212":12, "1340030213":13, "1340030214":14, "1340030215":15, "1340030216":16, "1340030217":17, "version":110]
@@ -69,9 +47,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     
     //Brixton Version 1
     //let ctrlData = ["0001":"S", "0002":"P02020", "0003":"EV100", "0004":"P01100", "0009":"NS", "0101":"N", "0209":"N", "0301":"N", "0409":"N","0501":"N", "0609":"N","0701":"N","0801":"P03005", "0802":"P03010", "0803":"V015", "0804":"V020","0805":"V025", "0806":"V050", "0807":"N", "0808":"E", "0809":"E", "0901":"E", "0902":"E", "0903":"E", "0904":"E", "0905":"E", "0906":"E", "0908":"EP04100", "0909":"E"]
-    
-    //Brixton Version 2
-    //let ctrlData = ["0001":"S", "0002":"P02020", "0003":"EV100", "0004":"P01100", "0005":"E", "0007":"E", "0009":"NS", "0101":"N", "0209":"N", "0301":"NP05005", "0401":"P05005", "0402":"V010", "0403":"V015", "0404":"V020","0405":"V025", "0406":"V030", "0407":"V35", "0408":"NP06100", "0409":"NP06100", "0501":"E", "0502":"E", "0503":"E", "0504":"E", "0505":"E", "0506":"E", "0507":"E", "0508":"E", "0509":"E"]
 
     //Edinburgh Version 1
     //var ctrlData = ["0015":"P01010", "0016":"P02040", "0017":"P03100"]
@@ -79,15 +54,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     //Edinburgh Version 1.1
     var ctrlData = ["0014":"S", "0015":"P01010", "0016":"P02040", "0017":"P03100", "version":"1.1"]
     
-    //Memo: for SOHO project
-    //1. Replace beaconID
-    //let beaconID = [ "2462318306":1, "2052043641":2, "4759649178":3, "2077214365":4, "3552631440":5, "5793654130":6 ]
-    //2. Replace ctrlData
-    //let ctrlData = [ "1111":"E" ]
-    //3. Replace sound files
-    //4. Change provisioning profile setting
-    //5. Archive & export
-    //6. Upload .ipa file on dropbox
 
     var newPOS = 0, cPOS = 0, pPOS = 0
     var SCENE = 0
@@ -145,7 +111,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         //setting deligate
         manager.delegate = self
         
-//        passwordchecker ()
 
     }
     
