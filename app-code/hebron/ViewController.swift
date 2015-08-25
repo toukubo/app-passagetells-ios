@@ -102,6 +102,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             var Request:NSURLRequest  = NSURLRequest(URL: Url)
             NSURLConnection.sendAsynchronousRequest(Request, queue: NSOperationQueue.mainQueue(),completionHandler: responseforbeaconid)
         } else {
+            
             println ("no internet connection")
         }
         
@@ -478,67 +479,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         }
         return buf
     }
-    
-    func passwordGen() -> String {
-        let now = NSDate()
-        let dateFormatter = NSDateFormatter()
-        dateFormatter.locale = NSLocale(localeIdentifier: "en_GB")
-        dateFormatter.dateFormat = "dd"
-        let nowdd:String = dateFormatter.stringFromDate(now);
-        println("password: heb\(nowdd)ron")
-        return ("heb\(nowdd)ron")
-    }
-    func passwordchecker () {
-        passwordtoday = passwordGen() // genarating a password using date (dd)
-        var result = ""
-        if (config.stringForKey("PASSWORD") != nil)
-        {
-            result = config.stringForKey("PASSWORD")!
-        }
-        // pick up the saved password by NSUserDefaults
-        println("result: \(result)")
 
-        if result == passwordtoday {
-            println ("Password unlocked!")
-            ctrlrsv = 0
-            checkAuthorizationStatus ()
-        } else {
-        let alert = UIAlertView(title: "PASSWORD", message: "Buy a ticket at edfringe.com in advance, follow the instructions to visit the starting point with the ticket and ask a staff to enter the password below. Make sure if Bluetooth is turned on before use.", delegate: self, cancelButtonTitle: "OK" )
-            alert.alertViewStyle = .PlainTextInput
-            alertnumber = 1
-            alert.show()
-        }
-    }
-    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-//        switch alertnumber {
-//        case 1: //password
-            println ("alert result - 1")
-            let password = alertView.textFieldAtIndex(0)!.text
-//            if password == passwordtoday {
-//                println("great")
-                // save the password by NSUserDefaults
-                config.setObject(password, forKey:"PASSWORD")
-                config.synchronize()
-                //release the password-lock in the process
-                ctrlrsv = 0
-//                checkAuthorizationStatus ()
-//            } else {
-//                passwordchecker ()
-//            }
-//        case 2: //location service restricted/denied
-//            println ("alert result - 2")
-//            let url = NSURL(string: UIApplicationOpenSettingsURLString)!
-//            UIApplication.sharedApplication().openURL(url)
-//            let alert = UIAlertView(title: "Location Service", message: "Checking the availability of Location Service on the app.", delegate: self, cancelButtonTitle: "OK" )
-//            alertnumber = 3
-//            alert.show()
-//        case 3: //location service setting is changed
-//            println ("alert result - 3")
-////            checkAuthorizationStatus ()
-//        default:
-//            break
-//        }
-    }
     func responseforbeaconid(res: NSURLResponse!, data: NSData!, error: NSError!){
         var jsonbeaconid:NSDictionary! = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: nil) as? NSDictionary //get a data as ictionary
         if (jsonbeaconid != nil) {
