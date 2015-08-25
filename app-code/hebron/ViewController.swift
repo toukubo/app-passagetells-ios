@@ -254,15 +254,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             return
         }
         var beacon = beacons[ii] as! CLBeacon
-        /*
-        Datas from beacon
-        proximityUUID 
-        major
-        minor
-        proximity
-        accuracy 
-        rssi
-        */
+
         
         /*D/ if (beacon.proximity == CLProximity.Unknown) {
             self.distance.text = "Unknown Proximity"
