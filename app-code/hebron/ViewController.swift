@@ -114,50 +114,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         
 
     }
-    
-    func checkAuthorizationStatus () {
-        switch CLLocationManager.authorizationStatus() {
-        case .Restricted, .Denied:
-            //Device does not allowed
-            self.status.text = "Restricted/denied"
-            let alert = UIAlertView(title: "Location Service Setting", message: "The access to location services on this app is restricted/denied. Go to Settings > Privacy > Location Services to change the setting on your phone.", delegate: self, cancelButtonTitle: "OK" )
-            alertnumber = 2
-            alert.show()
-        case .NotDetermined:
-            self.status.text = "Restart the app"
-            //Asking permission
-            if(UIDevice.currentDevice().systemVersion.substringToIndex(advance(UIDevice.currentDevice().systemVersion.startIndex,1)).toInt() >= 8){
-                //iOS8 and later: call a function to request authorization
-                self.manager.requestWhenInUseAuthorization()
-            }else{
-                self.manager.startRangingBeaconsInRegion(self.region)
-            }
-            let alert = UIAlertView(title: "Location Service", message: "Checking the availability of Location Service on the app.", delegate: self, cancelButtonTitle: "OK" )
-            alertnumber = 3
-            alert.show()
-        case .AuthorizedAlways, .AuthorizedWhenInUse:
-            //Start monitoring
-            println("Monitoring")
-            self.status.text = "Playing " + toString(beaconID["version"]!)
-            for i=0;i<27;i++ { self.audio[i].volume = 0 }
-            //self.audio[0].volume = 1
-            self.audio[0].playFileAsync("0000.mp3", target: self, selector: "PTDidStartPlay")
-            //SoundFileLoader()
-            self.manager.startRangingBeaconsInRegion(self.region)
-        default:
-            //unknown error
-            println("Unknown Error")
-            self.status.text = "Unknown Error"
-        }
-    }
+ 
     
     //imprimentation of CCLocationManager deligate ---------------------------------------------->
     
     /*
     - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
-    Parameters
-    manager : The location manager object reporting the event.
-    region  : The region that is being monitored.
     */
     func locationManager(manager: CLLocationManager!, didStartMonitoringForRegion region: CLRegion!) {
         manager.requestStateForRegion(region)
@@ -167,9 +129,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     /*
     - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
     Parameters
-    manager :The location manager object reporting the event.
-    state   :The state of the specified region. For a list of possible values, see the CLRegionState type.
-    region  :The region whose state was determined.
     */
     func locationManager(manager: CLLocationManager!, didDetermineState state: CLRegionState, forRegion inRegion: CLRegion!) {
         if (state == .Inside) {
@@ -180,10 +139,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     
     /*
     - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
-    Parameters
-    manager : The location manager object reporting the event.
-    region  : The region for which the error occurred.
-    error   : An error object containing the error code that indicates why region monitoring failed.
     */
     func locationManager(manager: CLLocationManager!, monitoringDidFailForRegion region: CLRegion!, withError error: NSError!) {
         println("monitoringDidFailForRegion \(error)")
@@ -257,24 +212,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         var beacon = beacons[ii] as! CLBeacon
 
         
-        /*D/ if (beacon.proximity == CLProximity.Unknown) {
-            self.distance.text = "Unknown Proximity"
-            reset()
-            return
-        } else if (beacon.proximity == CLProximity.Immediate) {
-            self.distance.text = "Immediate"
-        } else if (beacon.proximity == CLProximity.Near) {
-            self.distance.text = "Near"
-        } else if (beacon.proximity == CLProximity.Far) {
-            self.distance.text = "Far"
-        }
-        self.status.text   = "OK"
-        self.uuid.text     = beacon.proximityUUID.UUIDString
-        self.major.text    = "\(beacon.major)"
-        self.minor.text    = "\(beacon.minor)"
-        self.accuracy.text = "\(beacon.accuracy)"
-        self.rssi.text     = "\(beacon.rssi)"
-        */
+
         t = ""
         total[cPOS]!++
         /*D/ for i = 0; i < 24; ++i {
