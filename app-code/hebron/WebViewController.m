@@ -79,23 +79,16 @@
  navigationType:(UIWebViewNavigationType)navigationType {
     
     NSLog(@"shouldStartLoadWithRequest: %@", [request.URL lastPathComponent]);
-    if ([[request.URL scheme] isEqual:@"passagetells"] && [[request.URL host] isEqual:@"trigger"]) {
-        NSLog(@"passagetells scheme");
+    if ([[request.URL scheme] isEqual:@"passagetells"]) { // TODO && uri contains download.
+        NSLog(@"passagetells scheme//download action");
         
-        // start camera
-//        printf(<#const char *restrict, ...#>)
+        // TODO do  the code to donwload the fils. make downlload: project method or class.
         
-        // XXX: no need to release resource on iOS 5
-        //[imgPicker release];
+        
+        
         
         return NO;
     } else if ([[request.URL scheme] isEqual:@"jp.studiovoice.evaidios"] && [[request.URL host] isEqual:@"reader"]) {
-        // ADD: present a barcode reader that scans from the camera feed
-                // TODO: (optional) additional reader configuration here
-        
-        // EXAMPLE: disable rarely used I2/5 to improve performance
-
-        // present and release the controller
 
         
         return NO;
@@ -103,17 +96,7 @@
         [[UIApplication sharedApplication] openURL:request.URL];
         return NO;
     } else {
-        if([[request.URL lastPathComponent] isEqualToString:@"PostPublicUserDetailForCard.do"] ||
-           [[request.URL lastPathComponent] isEqualToString:@"exchange.jsp"] ||
-           [[request.URL lastPathComponent] isEqualToString:@"ShowPublicUserForExchanges.do"] ||
-           [[request.URL lastPathComponent] isEqualToString:@"ShowPublicUserForCard.do"]){
-            //            NSLog(@"Showing our Ad there");
 
-        }
-        else{
-            //            NSLog(@"Hide or not show Ad here");
-
-        }
         //NSLog(@"shouldStartLoadWithRequest: YES");
         return YES;
     }
@@ -124,12 +107,6 @@
     
     // get user id from URL string
     NSLog(@"webViewDidFinishLoad: %@", [webView.request.URL lastPathComponent]);
-    if([[webView.request.URL lastPathComponent] isEqualToString:@"ShowPublicUser.do"]){
-
-    }
-//    NSDictionary *params = [webView.request.URL queryAsDictionary];
-//    self.myID = [params objectForKey:@"id"];
-    //NSLog(self.myID);
     
     // hide loading indicator
     if (mbLoad != nil && !mbLoad.isHidden) {
