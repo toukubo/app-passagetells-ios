@@ -7,19 +7,30 @@
 //
 
 #import "WebViewController.h"
+#import "MBProgressHUD.h"
 
-@interface WebViewController () <UIWebViewDelegate>
+@interface WebViewController () <UIWebViewDelegate, MBProgressHUDDelegate>
 
 @property (readwrite) BOOL needToReload;
 @property (nonatomic, readwrite) NSString *baseURL;
+@property (nonatomic, readwrite) MBProgressHUD *mbLoad;
 
 @end
 
 @implementation WebViewController
 
+@synthesize mbLoad;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    // show loading indicator
+    mbLoad = [[MBProgressHUD alloc] initWithView:self.view];
+    mbLoad.labelText = @"Loading...";
+    [self.view addSubview:mbLoad];
+    [mbLoad setDelegate:self];
+    [mbLoad show:YES];
     
     self.webView.backgroundColor = [UIColor blackColor];
     self.webView.scalesPageToFit = YES;
@@ -27,7 +38,7 @@
     self.webView.delegate = self;
     self.webView.scrollView.bounces = NO;
     
-    self.baseURL = @"http://www.google.com";
+    self.baseURL = @"http://passagetellsproject.net/app/";
     
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.baseURL]]];
 }
@@ -66,6 +77,7 @@
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType {
+    
     NSLog(@"shouldStartLoadWithRequest: %@", [request.URL lastPathComponent]);
     if ([[request.URL scheme] isEqual:@"jp.studiovoice.evaidios"] && [[request.URL host] isEqual:@"trigger"]) {
         //NSLog(@"shouldStartLoadWithRequest: NO");
@@ -120,6 +132,10 @@
     //NSLog(self.myID);
     
     // hide loading indicator
+    if (mbLoad != nil && !mbLoad.isHidden) {
+        NSLog(@"hide loading indicator");
+        [mbLoad hide:YES];
+    }
 }
 
 - (void)webView:(UIWebView*)webView didFailLoadWithError:(NSError*) error {
@@ -137,6 +153,15 @@
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Eva ID" message:desc delegate:self
                                           cancelButtonTitle:@"Retry" otherButtonTitles:@"Close", nil];
     [alert show];
+}
+
+#pragma mark -
+#pragma mark MBProgressHUDDelegate methods
+
+- (void)hudWasHidden:(MBProgressHUD *)hud {
+    // Remove HUD from screen when the HUD was hidded
+    [mbLoad removeFromSuperview];
+    mbLoad = nil;
 }
 
 @end
