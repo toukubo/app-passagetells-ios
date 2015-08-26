@@ -10,7 +10,6 @@
 #import <ObjectAL.h>
 
 
-
 @interface Objc : NSObject
 
 @end

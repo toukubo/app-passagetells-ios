@@ -30,7 +30,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     let proximityUUID = NSUUID(UUIDString:"B9407F30-F5F8-466E-AFF9-25556B57FE6D")
     var region  = CLBeaconRegion()
     var manager = CLLocationManager()
-
     
     //Estimote Beacon IDs & positions
 
@@ -52,7 +51,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     //var ctrlData = ["0015":"P01010", "0016":"P02040", "0017":"P03100"]
     
     //Edinburgh Version 1.1
-    var ctrlData = ["0014":"S", "0015":"P01010", "0016":"P02040", "0017":"P03100", "version":"1.1"]
+    var ctrlData =  ["0014":"S", "0015":"P01010", "0016":"P02040", "0017":"P03100", "version":"1.1"]
     
 
     var newPOS = 0, cPOS = 0, pPOS = 0
