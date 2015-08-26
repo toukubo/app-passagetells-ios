@@ -83,89 +83,146 @@
     
     NSLog(@"shouldStartLoadWithRequest: %@", [request.URL lastPathComponent]);
     if ([[request.URL scheme] isEqual:@"passagetells"]) { // TODO && uri contains download.
-        NSLog(@"passagetells scheme//download action");
         
-        // Get JSON files
-        // BeaconID.JSON
-        [[[DataManager sharedManager] beaconIDs] removeAllObjects];
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        NSLog(@"passagetells//");
+        NSString *actionsAndParams = request.URL.lastPathComponent;
+        NSString *query = request.URL.query;
         
-        [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"beaconid.json" params:@{} success:^(id successBlock) {
+        
+        
+        NSMutableDictionary *queryStringDictionary = [[NSMutableDictionary alloc] init];
+        NSArray *urlComponents = [query componentsSeparatedByString:@"&"];
+        
+        
+        for (NSString *keyValuePair in urlComponents)
+        {
+            NSArray *pairComponents = [keyValuePair componentsSeparatedByString:@"="];
+            NSString *key = [[pairComponents firstObject] stringByRemovingPercentEncoding];
+            NSString *value = [[pairComponents lastObject] stringByRemovingPercentEncoding];
             
-            NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
+            [queryStringDictionary setObject:value forKey:key];
+        }
+        
+        
+        NSLog(actionsAndParams);
+        NSLog(query);
+        
+        NSLog(@"was path was...");
+        if ([actionsAndParams rangeOfString:@"download"].location != NSNotFound) {
+            NSLog(@"passagetells///download action");
             
-            NSDictionary *dict = [theJson JSONValue];
+            // Get JSON files
+            // BeaconID.JSON
+            [[[DataManager sharedManager] beaconIDs] removeAllObjects];
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
-            for (NSString *key in [dict allKeys]) {
-                NSString *value = [dict valueForKey:key];
+            [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"beaconid.json" params:@{} success:^(id successBlock) {
                 
-                [[[DataManager sharedManager] beaconIDs] addObject:[[BeaconID alloc] initWith:[key intValue] mediaID:[value intValue]]];
-            }
-            
-        } error:^(NSError *error) {
-            NSLog(@"Please check your internet connection.");
-            
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        }];
-        
-        
-        // CtrlData.JSON
-        [[[DataManager sharedManager] ctrlDatas] removeAllObjects];
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"ctrldata.json" params:@{} success:^(id successBlock) {
-            
-            NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
-            
-            NSDictionary *dict = [theJson JSONValue];
-            
-            for (NSString *key in [dict allKeys]) {
-                NSString *value = [dict valueForKey:key];
+                NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
                 
-                [[[DataManager sharedManager] ctrlDatas] addObject:[[CtrlData alloc] initWith:key ctrlVal:value]];
-            }
-            
-        } error:^(NSError *error) {
-            NSLog(@"Please check your internet connection.");
-            
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        }];
-        
-        
-        // Projects.JSON
-        [[[DataManager sharedManager] projects] removeAllObjects];
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"projects.json" params:@{} success:^(id successBlock) {
-            
-            NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
-            
-            NSDictionary *dict = [theJson JSONValue];
-            
-            for (NSString *key in [dict allKeys]) {
-                NSString *value = [dict valueForKey:key];
+                NSDictionary *dict = [theJson JSONValue];
                 
-                [[[DataManager sharedManager] projects] addObject:[[Projects alloc] initWith:[key intValue] name:value]];
-            }
+                for (NSString *key in [dict allKeys]) {
+                    NSString *value = [dict valueForKey:key];
+                    
+                    [[[DataManager sharedManager] beaconIDs] addObject:[[BeaconID alloc] initWith:[key intValue] mediaID:[value intValue]]];
+                }
+                
+            } error:^(NSError *error) {
+                NSLog(@"Please check your internet connection.");
+                
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            }];
             
-        } error:^(NSError *error) {
-            NSLog(@"Please check your internet connection.");
             
-            [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            // CtrlData.JSON
+            [[[DataManager sharedManager] ctrlDatas] removeAllObjects];
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
-            [self downloadMp3s];
-        }];
-        
-        return NO;
-    } else if ([[request.URL scheme] isEqual:@"jp.studiovoice.evaidios"] && [[request.URL host] isEqual:@"reader"]) {
-
-        
+            [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"ctrldata.json" params:@{} success:^(id successBlock) {
+                
+                NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
+                
+                NSDictionary *dict = [theJson JSONValue];
+                
+                for (NSString *key in [dict allKeys]) {
+                    NSString *value = [dict valueForKey:key];
+                    
+                    [[[DataManager sharedManager] ctrlDatas] addObject:[[CtrlData alloc] initWith:key ctrlVal:value]];
+                }
+                
+            } error:^(NSError *error) {
+                NSLog(@"Please check your internet connection.");
+                
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            }];
+            
+            
+            // Projects.JSON
+            [[[DataManager sharedManager] projects] removeAllObjects];
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            
+            [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"projects.json" params:@{} success:^(id successBlock) {
+                
+                NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
+                
+                NSDictionary *dict = [theJson JSONValue];
+                
+                for (NSString *key in [dict allKeys]) {
+                    NSString *value = [dict valueForKey:key];
+                    
+                    [[[DataManager sharedManager] projects] addObject:[[Projects alloc] initWith:[key intValue] name:value]];
+                }
+                
+            } error:^(NSError *error) {
+                NSLog(@"Please check your internet connection.");
+                
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [self downloadMp3s];
+            }];
+            
+            
+            
+            
+            
+            
+        }else if([actionsAndParams rangeOfString:@"selectProject"].location != NSNotFound) {
+            NSLog(@"passagetells///selectProject action");
+            
+            //parse the url
+            NSString *project_id = (NSString*)[queryStringDictionary objectForKey:@"id"];
+            NSString *project_name = (NSString*)[queryStringDictionary objectForKey:@"name"];
+            NSLog(project_id);
+            NSLog(project_name);
+            NSLog(@"was the project id");
+            NSMutableString *projectURL = [NSMutableString stringWithString:HOME_URL];
+            //            [ projectURL appendString:@"/"];
+            [projectURL appendString:project_name];
+            [projectURL appendString:@"/intro.html"];
+            NSLog(projectURL);
+            NSString *oururl = [NSString stringWithString:projectURL];
+            NSLog(oururl);
+            NSURL* url = [NSURL URLWithString: oururl];
+            
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+            
+            [request setHTTPMethod:@"GET"];
+            //            [request setValue:userAgent forHTTPHeaderField:@"User-Agent"];
+            //            [request setValue:content_type forHTTPHeaderField:@"Content-Type"];
+            [webView loadRequest:request];
+            
+            
+            //TODO save the project id and
+            //            [[UIApplication sharedApplication] openURL:oururl];
+            return NO;
+        }
         return NO;
     } else if ([[request.URL scheme] isEqual:@"mailto"] || [[request.URL scheme] isEqual:@"tel"]) {
         [[UIApplication sharedApplication] openURL:request.URL];
         return NO;
     } else {
-
+        
         //NSLog(@"shouldStartLoadWithRequest: YES");
         return YES;
     }
@@ -213,7 +270,7 @@
 #pragma mark -
 #pragma mark Download MP3s
 -(void)downloadMp3s{
-
+    
     NSMutableArray *savedFiles = [[DataManager sharedManager] mp3Files];
     
     self.mp3FileArray = [[NSMutableArray alloc] init];
@@ -251,9 +308,9 @@
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
-//    for (NSString *url in self.mp3FileArray) {
-//        [self downloadMp3File:[NSString stringWithFormat:@"%@%@",BASE_URL,url]];
-//    }
+    //    for (NSString *url in self.mp3FileArray) {
+    //        [self downloadMp3File:[NSString stringWithFormat:@"%@%@",BASE_URL,url]];
+    //    }
     
     [self downloadMp3File:[NSString stringWithFormat:@"%@%@",BASE_URL, self.mp3FileArray[0]]];
     
@@ -293,7 +350,7 @@
         if ([self.mp3FileArray count] == 0) {
             // Finish Downloading and Goto Main VC
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-
+            
             [self gotoNextVC];
         }
         else
