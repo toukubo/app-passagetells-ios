@@ -79,11 +79,11 @@
  navigationType:(UIWebViewNavigationType)navigationType {
     
     NSLog(@"shouldStartLoadWithRequest: %@", [request.URL lastPathComponent]);
-    if ([[request.URL scheme] isEqual:@"jp.studiovoice.evaidios"] && [[request.URL host] isEqual:@"trigger"]) {
-        //NSLog(@"shouldStartLoadWithRequest: NO");
+    if ([[request.URL scheme] isEqual:@"passagetells"] && [[request.URL host] isEqual:@"trigger"]) {
+        NSLog(@"passagetells scheme");
         
         // start camera
-        
+//        printf(<#const char *restrict, ...#>)
         
         // XXX: no need to release resource on iOS 5
         //[imgPicker release];
