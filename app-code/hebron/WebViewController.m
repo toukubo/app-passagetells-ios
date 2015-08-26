@@ -80,17 +80,61 @@
     
     NSLog(@"shouldStartLoadWithRequest: %@", [request.URL lastPathComponent]);
     if ([[request.URL scheme] isEqual:@"passagetells"]) { // TODO && uri contains download.
-        NSLog(@"passagetells scheme//download action");
-        
-        // TODO do  the code to donwload the fils. make downlload: project method or class.
-        
-        
-        
-        
-        return NO;
-    } else if ([[request.URL scheme] isEqual:@"jp.studiovoice.evaidios"] && [[request.URL host] isEqual:@"reader"]) {
+        NSLog(@"passagetells//");
+        NSString *actionsAndParams = request.URL.lastPathComponent;
+        NSString *query = request.URL.query;
 
         
+        NSMutableDictionary *queryStringDictionary = [[NSMutableDictionary alloc] init];
+        NSArray *urlComponents = [query componentsSeparatedByString:@"&"];
+
+        
+        for (NSString *keyValuePair in urlComponents)
+        {
+            NSArray *pairComponents = [keyValuePair componentsSeparatedByString:@"="];
+            NSString *key = [[pairComponents firstObject] stringByRemovingPercentEncoding];
+            NSString *value = [[pairComponents lastObject] stringByRemovingPercentEncoding];
+            
+            [queryStringDictionary setObject:value forKey:key];
+        }
+
+
+        NSLog(actionsAndParams);
+        NSLog(query);
+        
+        NSLog(@"was path was...");
+        if ([actionsAndParams rangeOfString:@"download"].location != NSNotFound) {
+                NSLog(@"passagetells///download action");
+        }else if([actionsAndParams rangeOfString:@"selectProject"].location != NSNotFound) {
+           NSLog(@"passagetells///selectProject action");
+            
+            //parse the url
+            NSString *project_id = (NSString*)[queryStringDictionary objectForKey:@"id"];
+            NSString *project_name = (NSString*)[queryStringDictionary objectForKey:@"name"];
+            NSLog(project_id);
+            NSLog(project_name);
+            NSLog(@"was the project id");
+            NSMutableString *projectURL = [NSMutableString stringWithString:self.baseURL];
+//            [ projectURL appendString:@"/"];
+            [projectURL appendString:project_name];
+            [projectURL appendString:@"/intro.html"];
+            NSLog(projectURL);
+            NSString *oururl = [NSString stringWithString:projectURL];
+            NSLog(oururl);
+            NSURL* url = [NSURL URLWithString: oururl];
+            
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+            
+            [request setHTTPMethod:@"GET"];
+//            [request setValue:userAgent forHTTPHeaderField:@"User-Agent"];
+//            [request setValue:content_type forHTTPHeaderField:@"Content-Type"];
+            [webView loadRequest:request];
+            
+            
+            //TODO save the project id and
+//            [[UIApplication sharedApplication] openURL:oururl];
+            return NO;
+        }
         return NO;
     } else if ([[request.URL scheme] isEqual:@"mailto"] || [[request.URL scheme] isEqual:@"tel"]) {
         [[UIApplication sharedApplication] openURL:request.URL];
