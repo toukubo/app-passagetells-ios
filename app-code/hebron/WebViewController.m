@@ -20,6 +20,7 @@
 
 @property (readwrite) NSString *project_name;
 @property (readwrite) NSString *project_id;
+@property (readwrite) NSString *beaconsIDSelf;
 
 
 @end
@@ -120,23 +121,6 @@
             [[[DataManager sharedManager] beaconIDs] removeAllObjects];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
-            [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"beaconid.json" params:@{} success:^(id successBlock) {
-                
-                NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
-                
-                NSDictionary *dict = [theJson JSONValue];
-                
-                for (NSString *key in [dict allKeys]) {
-                    NSString *value = [dict valueForKey:key];
-                    
-                    [[[DataManager sharedManager] beaconIDs] addObject:[[BeaconID alloc] initWith:[key intValue] mediaID:[value intValue]]];
-                }
-                
-            } error:^(NSError *error) {
-                NSLog(@"Please check your internet connection.");
-                
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            }];
             
             
             // CtrlData.JSON
@@ -166,7 +150,7 @@
             [[[DataManager sharedManager] projects] removeAllObjects];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
-            [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"projects.json" params:@{} success:^(id successBlock) {
+            [[AFNetManager sharedManager] sendGETRequestTo:HOME_URL path:@"projects.json" params:@{} success:^(id successBlock) {
                 
                 NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
                 
@@ -183,12 +167,44 @@
                 
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 
+            }];
+            
+            
+            ///////////// downloading beacons
+            
+            NSMutableString *mutableBeaaconsURL = [NSMutableString stringWithString:HOME_URL];
+            [mutableBeaaconsURL appendString:@"/"];
+            
+            [mutableBeaaconsURL appendString:self.project_name];
+            [mutableBeaaconsURL appendString:@"/"];
+            NSString *ourbeaconsurl = [NSString stringWithString:mutableBeaaconsURL];
+            NSLog(ourbeaconsurl);
+            [[AFNetManager sharedManager] sendGETRequestTo:ourbeaconsurl path:@"beaconid.json" params:@{} success:^(id successBlock) {
+                
+                NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
+                NSLog(theJson);
+                [[DataManager sharedManager] setBeaconID:theJson];
+                
+                NSDictionary *dict = [theJson JSONValue];
+                
+                for (NSString *key in [dict allKeys]) {
+                    NSString *value = [dict valueForKey:key];
+                    
+                    [[[DataManager sharedManager] beaconIDs] addObject:[[BeaconID alloc] initWith:[key intValue] mediaID:[value intValue]]];
+                }
+                self.beaconsIDSelf =                [[DataManager sharedManager] beaconIDs];
+                NSLog(@"yearh");
                 [self downloadMp3s];
+
+            } error:^(NSError *error) {
+                NSLog(@"Please check your internet connection.");
+                
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             }];
             
             
             
-            
+
             
             
         }else if([actionsAndParams rangeOfString:@"selectProject"].location != NSNotFound) {
@@ -197,6 +213,7 @@
             //parse the url
             self.project_id = (NSString*)[queryStringDictionary objectForKey:@"id"];
             self.project_name = (NSString*)[queryStringDictionary objectForKey:@"name"];
+            [[DataManager sharedManager] setProject_name:self.project_name];
             NSLog(self.project_id);
             NSLog(self.project_name);
             NSLog(@"was the project id");
@@ -210,6 +227,9 @@
             NSURL* url = [NSURL URLWithString: oururl];
             
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+            
+     
+            
             
             [request setHTTPMethod:@"GET"];
             [webView loadRequest:request];
@@ -287,13 +307,18 @@
         return;
     }
     else if ([savedFiles count] == 0) {
-        self.mp3FileArray = [NSMutableArray arrayWithArray:MP3_FILES];
+        self.mp3FileArray = [NSMutableArray arrayWithArray:self.beaconsIDSelf];
     }
     else
     {
         
-        for (NSString *downFile in MP3_FILES) {
+        for (BeaconID *beacon in self.beaconsIDSelf) {
             
+
+            int thenumber =1*100+beacon.mediaID;
+            NSString *downFile = [ NSString stringWithFormat:@"%04d%@", thenumber,@".mp3"];
+            NSLog(downFile);
+
             BOOL flag = false;
             
             for (Mp3File *savedFile in savedFiles) {
@@ -308,7 +333,7 @@
             }
             else
             {
-                [self.mp3FileArray addObject:downFile];
+                [self.mp3FileArray addObject:beacon];
             }
         }
     }
@@ -319,11 +344,23 @@
     //        [self downloadMp3File:[NSString stringWithFormat:@"%@%@",BASE_URL,url]];
     //    }
     
-    [self downloadMp3File:[NSString stringWithFormat:@"%@%@",BASE_URL, self.mp3FileArray[0]]];
-    
+    //1 hardcoded TODO
+
+    if([self.mp3FileArray count] != 0){
+        [self downloadMp3File:((BeaconID*)self.mp3FileArray[0]).mediaID];
+    }else{
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+
+        [self gotoNextVC];
+    }
 }
 
--(void)downloadMp3File:(NSString *)urlString {
+- (void)downloadMp3File:(int) mediaid {
+    
+    int thenumber =1*100+mediaid;
+    NSString *filename = [ NSString stringWithFormat:@"%04d%@", thenumber,@".mp3"];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@",BASE_URL, filename];
+
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
     
@@ -343,12 +380,13 @@
         if ([self.mp3FileArray count] == 0){
             // Finish Downloading and Goto Main VC
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
+            NSLog(urlString);
             [self gotoNextVC];
         }
         else
         {
-            [self downloadMp3File:[NSString stringWithFormat:@"%@%@",BASE_URL, self.mp3FileArray[0]]];
+            [self downloadMp3File:((BeaconID*)self.mp3FileArray[0]).mediaID];
+
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -362,7 +400,7 @@
         }
         else
         {
-            [self downloadMp3File:[NSString stringWithFormat:@"%@%@",BASE_URL, self.mp3FileArray[0]]];
+            [self downloadMp3File:((BeaconID*)self.mp3FileArray[0]).mediaID];
         }
     }];
     

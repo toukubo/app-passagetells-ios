@@ -26,6 +26,8 @@ static DataManager *manager = nil;
 
 -(void)initManager{
     self.beaconIDs = [[NSMutableArray alloc] init];
+    self.beaconID = [[NSString alloc] init];
+    self.project_name = [[NSString alloc] init];
     self.ctrlDatas = [[NSMutableArray alloc] init];
     self.projects = [[NSMutableArray alloc] init];
     
