@@ -18,6 +18,10 @@
 
 @property (nonatomic, retain) NSMutableArray *mp3FileArray;
 
+@property (readwrite) NSString *project_name;
+@property (readwrite) NSString *project_id;
+
+
 @end
 
 @implementation WebViewController
@@ -191,14 +195,14 @@
             NSLog(@"passagetells///selectProject action");
             
             //parse the url
-            NSString *project_id = (NSString*)[queryStringDictionary objectForKey:@"id"];
-            NSString *project_name = (NSString*)[queryStringDictionary objectForKey:@"name"];
-            NSLog(project_id);
-            NSLog(project_name);
+            self.project_id = (NSString*)[queryStringDictionary objectForKey:@"id"];
+            self.project_name = (NSString*)[queryStringDictionary objectForKey:@"name"];
+            NSLog(self.project_id);
+            NSLog(self.project_name);
             NSLog(@"was the project id");
             NSMutableString *projectURL = [NSMutableString stringWithString:HOME_URL];
-            //            [ projectURL appendString:@"/"];
-            [projectURL appendString:project_name];
+                        [ projectURL appendString:@"/"];
+            [projectURL appendString:self.project_name];
             [projectURL appendString:@"/intro.html"];
             NSLog(projectURL);
             NSString *oururl = [NSString stringWithString:projectURL];
@@ -208,14 +212,17 @@
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
             
             [request setHTTPMethod:@"GET"];
-            //            [request setValue:userAgent forHTTPHeaderField:@"User-Agent"];
-            //            [request setValue:content_type forHTTPHeaderField:@"Content-Type"];
             [webView loadRequest:request];
             
             
             //TODO save the project id and
             //            [[UIApplication sharedApplication] openURL:oururl];
             return NO;
+        }else if([actionsAndParams rangeOfString:@"ok"].location != NSNotFound) {
+     
+            ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+            [self.navigationController pushViewController:vc animated:YES];
+
         }
         return NO;
     } else if ([[request.URL scheme] isEqual:@"mailto"] || [[request.URL scheme] isEqual:@"tel"]) {
@@ -369,8 +376,25 @@
     
     [[DataManager sharedManager] saveManager];
     
-    ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-    [self.navigationController pushViewController:vc animated:YES];
+    NSMutableString *projectURL = [NSMutableString stringWithString:HOME_URL];
+    //            [ projectURL appendString:@"/"];
+    NSLog(self.project_name);
+    [projectURL appendString:@"/"];
+    [projectURL appendString:self.project_name];
+    [projectURL appendString:@"/"];
+    [projectURL appendString:@"/instructions.html"];
+    NSLog(projectURL);
+    NSString *oururl = [NSString stringWithString:projectURL];
+    NSLog(oururl);
+    NSURL* url = [NSURL URLWithString: oururl];
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+    
+    [request setHTTPMethod:@"GET"];
+    [self.webView loadRequest:request];
+
+    
+    
 }
 
 @end
