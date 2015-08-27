@@ -28,6 +28,10 @@
 	<string>This app will use your location to play the sounds automatically. Push allow and restart the app. </string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app will use your location to play the sounds automatically. Push allow and restart the app. </string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -28,7 +28,6 @@ import OpenAL
 import AudioToolbox
 import AVFoundation
 
-
  class BeaconListner: NSObject,CLLocationManagerDelegate, CBPeripheralDelegate {
     
     @IBOutlet weak var status: UILabel!
@@ -37,6 +36,7 @@ import AVFoundation
     let proximityUUID = NSUUID(UUIDString:"B9407F30-F5F8-466E-AFF9-25556B57FE6D")
     var region  = CLBeaconRegion()
     var manager = CLLocationManager()
+//    var webview :WebViewController
     
     //Estimote Beacon IDs & positions
     
@@ -98,7 +98,29 @@ import AVFoundation
     var passwordtoday = ""
     var alertnumber = 1
     
-    func initilizeMethod() {
+    
+    static func parseIntoDictionary() -> NSDictionary?{
+        
+        var Url:NSURL = NSURL(string:"http://passagetellsproject.net/app/" + DataManager.sharedManager().project_name + "/beaconid.json")!
+        var resp : NSURLResponse ;
+        var err : NSError
+        // エラーを格納するオブジェクト
+        
+        var Request:NSURLRequest  = NSURLRequest(URL: Url)
+        println(Url)
+        var data = NSURLConnection.sendSynchronousRequest(Request, returningResponse: nil, error: nil)!
+        println(data)
+        println("oh and null")
+        var jsonbeaconid:NSDictionary! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: nil)! as? NSDictionary //get a data as ictionary
+        if (jsonbeaconid != nil) {
+            println(jsonbeaconid)
+            return jsonbeaconid
+        } else {
+            println("no internet connection")
+        }
+        return nil
+    }
+    override init() {
         
         println("Start!!!")
         
@@ -131,11 +153,45 @@ import AVFoundation
         println(proximityUUID)
         region = CLBeaconRegion(proximityUUID:proximityUUID,identifier:"EstimoteRegion")!
         
-        //setting deligate
-        manager.delegate = self
-        
+
         
     }
+    func checkAuthorizationStatus (webViewController:WebViewController) {
+        //setting deligate
+
+        manager.delegate = self
+
+        switch CLLocationManager.authorizationStatus() {
+        case .Restricted, .Denied:
+            //Device does not allowed
+            self.status.text = "Restricted/denied"
+            let alert = UIAlertView(title: "Location Service Setting", message: "The access to location services on this app is restricted/denied. Go to Settings > Privacy > Location Services to change the setting on your phone.", delegate: self, cancelButtonTitle: "OK" )
+            alertnumber = 2
+            alert.show()
+        case .NotDetermined:
+            self.status.text = "Restart the app"
+            //Asking permission
+            if(UIDevice.currentDevice().systemVersion.substringToIndex(advance(UIDevice.currentDevice().systemVersion.startIndex,1)).toInt() >= 8){
+                //iOS8 and later: call a function to request authorization
+                self.manager.requestWhenInUseAuthorization()
+            }else{
+                self.manager.startRangingBeaconsInRegion(self.region)
+            }
+            let alert = UIAlertView(title: "Location Service", message: "Checking the availability of Location Service on the app.", delegate: self, cancelButtonTitle: "OK" )
+            alertnumber = 3
+            alert.show()
+        case .AuthorizedAlways, .AuthorizedWhenInUse:
+            //Start monitoring
+            println("Monitoring")
+            self.manager.startRangingBeaconsInRegion(self.region)
+        default:
+            //unknown error
+            println("Unknown Error")
+            self.status.text = "Unknown Error"
+        }
+    }
+
+    
     
     //imprimentation of CCLocationManager deligate ---------------------------------------------->
     
@@ -145,6 +201,8 @@ import AVFoundation
     func locationManager(manager: CLLocationManager!, didStartMonitoringForRegion region: CLRegion!) {
         manager.requestStateForRegion(region)
         self.status.text = "Scanning"
+        println("mark 2 ------")
+
     }
     
     /*
@@ -162,6 +220,8 @@ import AVFoundation
     - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
     */
     func locationManager(manager: CLLocationManager!, monitoringDidFailForRegion region: CLRegion!, withError error: NSError!) {
+        println("mark 2 ------")
+
         println("monitoringDidFailForRegion \(error)")
         self.status.text = "Error: \(error)"
     }
@@ -199,6 +259,7 @@ import AVFoundation
     */
     func locationManager(manager: CLLocationManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
         
+        println("mark 2 ------")
         if(beacons.count == 0) { reset(); return }
         
         var ii = -1, iii = 0

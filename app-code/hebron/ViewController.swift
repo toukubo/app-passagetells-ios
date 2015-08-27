@@ -205,6 +205,36 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         self.status.text = "Reset"
     }
     
+    static func  getBeacon(beacons:[AnyObject]!,beaconID:NSDictionary) -> CLBeacon?{
+        var ii = -1, iii = 0
+        var ttt = ""
+
+        for var i = 0; i < beacons.count; i++ {
+            var beacon = beacons[i] as! CLBeacon
+            var ttt = "\(beacon.minor):\(beacon.accuracy):\(beacon.rssi):"
+            if (beacon.proximity == CLProximity.Unknown) {
+                ttt += "Unknown\n"
+            } else if (beacon.proximity == CLProximity.Immediate) {
+                ttt += "Immediate\n"
+            } else if (beacon.proximity == CLProximity.Near) {
+                ttt += "Near\n"
+            } else if (beacon.proximity == CLProximity.Far) {
+                ttt += "Far\n"
+            }
+            if (beacon.proximity != CLProximity.Unknown && beaconID["\(beacon.major)\(beacon.minor)"] != nil && iii == 0) {
+                ii = i  // save the first one's number
+            }
+        }
+        //D/ self.beaconlist.text = t + tt;
+        if (ii == -1) {
+            //D/ self.colour.text = "Unknown proximity / beacons"
+            return nil
+        }
+        var beacon = beacons[ii] as! CLBeacon
+        return beacon;
+        
+    }
+    
     /*
     Delicate method reciving beacons
     - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
@@ -238,7 +268,6 @@ println("mark 1 ! --------------")
                 t = ("\(ttt)\n") // save the first one's info
                 iii = 1 // the flag that the first one is got
             }
-            tt += ttt
         }
         //D/ self.beaconlist.text = t + tt;
         if (ii == -1) {

@@ -8,10 +8,9 @@
 
 #import "WebViewController.h"
 #import "passagetells-Swift.h"
-
 #import "Common.h"
 
-@interface WebViewController () <UIWebViewDelegate, MBProgressHUDDelegate>
+@interface WebViewController () <UIWebViewDelegate, MBProgressHUDDelegate,CLLocationManagerDelegate>
 
 @property (readwrite) BOOL needToReload;
 @property (nonatomic, readwrite) MBProgressHUD *mbLoad;
@@ -49,6 +48,9 @@
     self.webView.scrollView.bounces = NO;
     
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:HOME_URL]]];
+    
+
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -86,31 +88,38 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
  navigationType:(UIWebViewNavigationType)navigationType {
     
+    
+    
+    
+    NSLog(@"passagetells//");
+    NSString *actionsAndParams = request.URL.lastPathComponent;
+    NSString *query = request.URL.query;
+    
+    
+    
+    NSMutableDictionary *queryStringDictionary = [[NSMutableDictionary alloc] init];
+    NSArray *urlComponents = [query componentsSeparatedByString:@"&"];
+    
+    
+    for (NSString *keyValuePair in urlComponents)
+    {
+        NSArray *pairComponents = [keyValuePair componentsSeparatedByString:@"="];
+        NSString *key = [[pairComponents firstObject] stringByRemovingPercentEncoding];
+        NSString *value = [[pairComponents lastObject] stringByRemovingPercentEncoding];
+        
+        [queryStringDictionary setObject:value forKey:key];
+    }
+    
+    
+    NSLog(actionsAndParams);
+    NSLog(query);
+
+    
+    
+    
+    
     NSLog(@"shouldStartLoadWithRequest: %@", [request.URL lastPathComponent]);
     if ([[request.URL scheme] isEqual:@"passagetells"]) { // TODO && uri contains download.
-        
-        NSLog(@"passagetells//");
-        NSString *actionsAndParams = request.URL.lastPathComponent;
-        NSString *query = request.URL.query;
-        
-        
-        
-        NSMutableDictionary *queryStringDictionary = [[NSMutableDictionary alloc] init];
-        NSArray *urlComponents = [query componentsSeparatedByString:@"&"];
-        
-        
-        for (NSString *keyValuePair in urlComponents)
-        {
-            NSArray *pairComponents = [keyValuePair componentsSeparatedByString:@"="];
-            NSString *key = [[pairComponents firstObject] stringByRemovingPercentEncoding];
-            NSString *value = [[pairComponents lastObject] stringByRemovingPercentEncoding];
-            
-            [queryStringDictionary setObject:value forKey:key];
-        }
-        
-        
-        NSLog(actionsAndParams);
-        NSLog(query);
         
         NSLog(@"was path was...");
         if ([actionsAndParams rangeOfString:@"download"].location != NSNotFound) {
@@ -228,17 +237,22 @@
             
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
             
+            
+            
+            self.locationManager = [[CLLocationManager alloc] init];
+            self.locationManager.delegate = self;
+            NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+            
+            
+            CLBeaconRegion *region =         [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID identifier:@"EstimoteRegion"];
+            
+            [self.locationManager startRangingBeaconsInRegion:region];
+
+            
+            
+            
             [request setHTTPMethod:@"GET"];
             [webView loadRequest:request];
-            
-            
-            
-            
-            
-//            BeaconListner *beaconListener = [BeaconListner alloc];
-//            [beaconListener init];
-//            [beaconListener initilizeMethod];
-            
             
             
             
@@ -257,10 +271,10 @@
         [[UIApplication sharedApplication] openURL:request.URL];
         return NO;
     } else {
-        
-        //NSLog(@"shouldStartLoadWithRequest: YES");
-        return YES;
+
     }
+    return YES;
+
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
@@ -288,7 +302,7 @@
     }
     
     NSString *desc = @"通信できませんでした。\n再度お試しください。";
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Eva ID" message:desc delegate:self
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Passagetells" message:desc delegate:self
                                           cancelButtonTitle:@"Retry" otherButtonTitles:@"Close", nil];
     [alert show];
 }
@@ -440,18 +454,67 @@
     [projectURL appendString:self.project_name];
     [projectURL appendString:@"/"];
     [projectURL appendString:@"/instructions.html"];
+    if([[DataManager sharedManager] onsite]){
+//        [projectURL appendString:@"?onsite=1"];
+    }
     NSLog(projectURL);
-    NSString *oururl = [NSString stringWithString:projectURL];
+    NSString *oururl = [NSString stringWithFormat:@"%@",projectURL];
     NSLog(oururl);
-    NSURL* url = [NSURL URLWithString: oururl];
+    NSURL *url = [NSURL URLWithString: oururl];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
-    
-    [request setHTTPMethod:@"GET"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:request];
 
     
     
 }
+
+
+
+/*
+ Delicate method reciving beacons
+ - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
+ Parameters
+ manager : The location manager object reporting the event.
+ beacons : An array of CLBeacon objects representing the beacons currently in range. You can use the information in these objects to determine the range of each beacon and its identifying information.
+ region  : The region object containing the parameters that were used to locate the beacons
+ */
+#pragma mark - Location Manager
+- (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
+    NSLog(@"mark 3");
+    if([beacons count] == 0) { return; }
+    if([[[DataManager sharedManager] beaconID] count]==0){
+        [[DataManager sharedManager] setBeaconID:[BeaconListner parseIntoDictionary]];
+    }
+    CLBeacon *beacon = [ViewController getBeacon:beacons beaconID: [[DataManager sharedManager] beaconID]];
+    if(beacon!=nil){
+        [[DataManager sharedManager] setOnsite:TRUE];
+    }
+    int ii = -1, iii = 0;
+    //use the first one except unknown
+    for(int i = 0; i < [beacons count]; i++) {
+//        var beacon = beacons[i] as! CLBeacon
+//        var ttt = "\(beacon.minor):\(beacon.accuracy):\(beacon.rssi):"
+//        if (beacon.proximity == CLProximity.Unknown) {
+//            ttt += "Unknown\n"
+//        } else if (beacon.proximity == CLProximity.Immediate) {
+//            ttt += "Immediate\n"
+//        } else if (beacon.proximity == CLProximity.Near) {
+//            ttt += "Near\n"
+//        } else if (beacon.proximity == CLProximity.Far) {
+//            ttt += "Far\n"
+//        }
+//        if (beacon.proximity != CLProximity.Unknown && beaconID["\(beacon.major)\(beacon.minor)"] != nil && iii == 0) {
+//            ii = i  // save the first one's number
+//            t = ("\(ttt)\n") // save the first one's info
+//            iii = 1 // the flag that the first one is got
+//        }
+//        tt += ttt
+    }
+    //D/ self.beaconlist.text = t + tt;
+
+
+}
+
 
 @end

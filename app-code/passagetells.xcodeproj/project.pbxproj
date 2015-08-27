@@ -368,6 +368,11 @@
 					F12283651A604F6500DBCE61 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = 79VKPSV2E3;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};

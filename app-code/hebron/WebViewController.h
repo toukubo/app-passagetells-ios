@@ -7,9 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Common.h"
+#import <CoreLocation/CoreLocation.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
-@interface WebViewController : UIViewController
+
+@interface WebViewController : UIViewController  <UIWebViewDelegate, MBProgressHUDDelegate,CLLocationManagerDelegate,CBPeripheralDelegate>
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
+@property (readwrite) CLLocationManager *locationManager;
 
 @end
