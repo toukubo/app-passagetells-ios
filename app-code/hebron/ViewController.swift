@@ -112,10 +112,46 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     
         //setting deligate
         manager.delegate = self
+        checkAuthorizationStatus();
         
 
     }
- 
+        func checkAuthorizationStatus () {
+                switch CLLocationManager.authorizationStatus() {
+                    case .Restricted, .Denied:
+                            //Device does not allowed
+                            self.status.text = "Restricted/denied"
+                            let alert = UIAlertView(title: "Location Service Setting", message: "The access to location services on this app is restricted/denied. Go to Settings > Privacy > Location Services to change the setting on your phone.", delegate: self, cancelButtonTitle: "OK" )
+                            alertnumber = 2
+                            alert.show()
+                    case .NotDetermined:
+                            self.status.text = "Restart the app"
+                            //Asking permission
+                            if(UIDevice.currentDevice().systemVersion.substringToIndex(advance(UIDevice.currentDevice().systemVersion.startIndex,1)).toInt() >= 8){
+                                    //iOS8 and later: call a function to request authorization
+                                    self.manager.requestWhenInUseAuthorization()
+                                }else{
+                                    self.manager.startRangingBeaconsInRegion(self.region)
+                                }
+                            let alert = UIAlertView(title: "Location Service", message: "Checking the availability of Location Service on the app.", delegate: self, cancelButtonTitle: "OK" )
+                            alertnumber = 3
+                            alert.show()
+                    case .AuthorizedAlways, .AuthorizedWhenInUse:
+                            //Start monitoring
+                            println("Monitoring")
+                            self.status.text = "Playing " + toString(beaconID["version"]!)
+                            for i=0;i<27;i++ { self.audio[i].volume = 0 }
+                            //self.audio[0].volume = 1
+                            self.audio[0].playFileAsync("0000.mp3", target: self, selector: "PTDidStartPlay")
+                            //SoundFileLoader()
+                            self.manager.startRangingBeaconsInRegion(self.region)
+                    default:
+                            //unknown error
+                            println("Unknown Error")
+                            self.status.text = "Unknown Error"
+                    }
+            }
+
     
     //imprimentation of CCLocationManager deligate ---------------------------------------------->
     
@@ -178,7 +214,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     region  : The region object containing the parameters that were used to locate the beacons
     */
     func locationManager(manager: CLLocationManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
-
+println("mark 1 ! --------------")
         if(beacons.count == 0) { reset(); return }
 
         var ii = -1, iii = 0
