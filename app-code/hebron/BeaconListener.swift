@@ -29,7 +29,7 @@ import AudioToolbox
 import AVFoundation
 
 
-@objc class BeaconListner: NSObject,CLLocationManagerDelegate, CBPeripheralDelegate {
+ class BeaconListner: NSObject,CLLocationManagerDelegate, CBPeripheralDelegate {
     
     @IBOutlet weak var status: UILabel!
     
@@ -42,6 +42,7 @@ import AVFoundation
     
     //Edinburgh Version 1.1
     var beaconID = ["1340030201":1, "1340030202":2, "1340030203":3, "1340030204":4, "1340030205":5, "1340030206":6, "1340030207":7, "1340030208":8, "1340030209":9, "1340030210":10, "1340030211":11, "1340030212":12, "1340030213":13, "1340030214":14, "1340030215":15, "1340030216":16, "1340030217":17, "version":110]
+    
     
     //Edinburgh Version 0
     //var beaconID = ["1340030217":17]
@@ -97,19 +98,44 @@ import AVFoundation
     var passwordtoday = ""
     var alertnumber = 1
     
-    func initializeMethod() {
+    func initilizeMethod() {
         
         println("Start!!!")
         
+        let reachability = AMReachability.reachabilityForInternetConnection()
+        if reachability.isReachable() {
+            var Url:NSURL = NSURL(string:"http://passagetellsproject.net/app/" + DataManager.sharedManager().project_name + "/beaconid.json")!
+            var resp : NSURLResponse ;
+            var err : NSError
+            // エラーを格納するオブジェクト
+
+            var Request:NSURLRequest  = NSURLRequest(URL: Url)
+            println(Url)
+            var data = NSURLConnection.sendSynchronousRequest(Request, returningResponse: nil, error: nil)!
+            println(data)
+            println("oh and null")
+            var jsonbeaconid:NSDictionary! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: nil)! as? NSDictionary //get a data as ictionary
+            if (jsonbeaconid != nil) {
+                beaconID = jsonbeaconid as! Dictionary
+            } else {
+                println("no internet connection")
+            }
+
+            
+        } else {
+            
+            println ("no internet connection")
+        }
+        
         //create CLBeaconRegion
-        region = CLBeaconRegion(proximityUUID:proximityUUID,identifier:"EstimoteRegion")
+        println(proximityUUID)
+        region = CLBeaconRegion(proximityUUID:proximityUUID,identifier:"EstimoteRegion")!
         
         //setting deligate
         manager.delegate = self
         
         
     }
-    
     
     //imprimentation of CCLocationManager deligate ---------------------------------------------->
     
@@ -414,15 +440,11 @@ import AVFoundation
     }
     
     func responseforbeaconid(res: NSURLResponse!, data: NSData!, error: NSError!){
-        var jsonbeaconid:NSDictionary! = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: nil) as? NSDictionary //get a data as ictionary
-        if (jsonbeaconid != nil) {
-            beaconID = jsonbeaconid as! Dictionary
-        } else {
-            println("no internet connection")
-        }
-        println(beaconID)
+        println(res.URL)
+        println("yeah")
+        
     }
-  
     
-    
+
+
 }

@@ -228,11 +228,19 @@
             
             NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
             
-     
-            
-            
             [request setHTTPMethod:@"GET"];
             [webView loadRequest:request];
+            
+            
+            
+            
+            
+//            BeaconListner *beaconListener = [BeaconListner alloc];
+//            [beaconListener init];
+//            [beaconListener initilizeMethod];
+            
+            
+            
             
             
             //TODO save the project id and
@@ -400,7 +408,18 @@
         }
         else
         {
-            [self downloadMp3File:((BeaconID*)self.mp3FileArray[0]).mediaID];
+            [self.mp3FileArray removeObjectAtIndex:0];
+            if ([self.mp3FileArray count] == 0) {
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                
+                [self gotoNextVC];
+
+            }else{
+                [self downloadMp3File:((BeaconID*)self.mp3FileArray[0]).mediaID];
+                
+            }
+
+
         }
     }];
     
