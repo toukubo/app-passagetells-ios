@@ -10,28 +10,6 @@
 		473E0BA11B8E594B00777AB0 /* BeaconListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E0BA01B8E594B00777AB0 /* BeaconListener.swift */; };
 		476C2C1A1B8CEB5F00038071 /* icon400.png in Resources */ = {isa = PBXBuildFile; fileRef = 476C2C191B8CEB5F00038071 /* icon400.png */; };
 		BAE532CB1B8CFCDB00EACDBD /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE532CA1B8CFCDB00EACDBD /* WebViewController.m */; };
-		BAE7AC931B8D84C300A2B413 /* 0000.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC801B8D84C300A2B413 /* 0000.mp3 */; };
-		BAE7AC941B8D84C300A2B413 /* 0001.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC811B8D84C300A2B413 /* 0001.mp3 */; };
-		BAE7AC951B8D84C300A2B413 /* 0002.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC821B8D84C300A2B413 /* 0002.mp3 */; };
-		BAE7AC961B8D84C300A2B413 /* 0003.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC831B8D84C300A2B413 /* 0003.mp3 */; };
-		BAE7AC971B8D84C300A2B413 /* 0004.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC841B8D84C300A2B413 /* 0004.mp3 */; };
-		BAE7AC981B8D84C300A2B413 /* 0005.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC851B8D84C300A2B413 /* 0005.mp3 */; };
-		BAE7AC991B8D84C300A2B413 /* 0006.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC861B8D84C300A2B413 /* 0006.mp3 */; };
-		BAE7AC9A1B8D84C300A2B413 /* 0007.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC871B8D84C300A2B413 /* 0007.mp3 */; };
-		BAE7AC9B1B8D84C300A2B413 /* 0008.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC881B8D84C300A2B413 /* 0008.mp3 */; };
-		BAE7AC9C1B8D84C300A2B413 /* 0009.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC891B8D84C300A2B413 /* 0009.mp3 */; };
-		BAE7AC9D1B8D84C300A2B413 /* 0010.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC8A1B8D84C300A2B413 /* 0010.mp3 */; };
-		BAE7AC9E1B8D84C300A2B413 /* 0011.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC8B1B8D84C300A2B413 /* 0011.mp3 */; };
-		BAE7AC9F1B8D84C300A2B413 /* 0012.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC8C1B8D84C300A2B413 /* 0012.mp3 */; };
-		BAE7ACA01B8D84C300A2B413 /* 0013.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC8D1B8D84C300A2B413 /* 0013.mp3 */; };
-		BAE7ACA11B8D84C300A2B413 /* 0014.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC8E1B8D84C300A2B413 /* 0014.mp3 */; };
-		BAE7ACA21B8D84C300A2B413 /* 0015.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC8F1B8D84C300A2B413 /* 0015.mp3 */; };
-		BAE7ACA31B8D84C300A2B413 /* 0016.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC901B8D84C300A2B413 /* 0016.mp3 */; };
-		BAE7ACA41B8D84C300A2B413 /* 0017.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC911B8D84C300A2B413 /* 0017.mp3 */; };
-		BAE7ACA51B8D84C300A2B413 /* 0303.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7AC921B8D84C300A2B413 /* 0303.mp3 */; };
-		BAE7ACA91B8D84D500A2B413 /* bg01.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7ACA61B8D84D500A2B413 /* bg01.mp3 */; };
-		BAE7ACAA1B8D84D500A2B413 /* bg02.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7ACA71B8D84D500A2B413 /* bg02.mp3 */; };
-		BAE7ACAB1B8D84D500A2B413 /* bg03.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BAE7ACA81B8D84D500A2B413 /* bg03.mp3 */; };
 		BAE7ACAF1B8D84F900A2B413 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE7ACAE1B8D84F900A2B413 /* MBProgressHUD.m */; };
 		BAE7ACC11B8DA2BC00A2B413 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE7ACB31B8DA2BC00A2B413 /* NSObject+SBJSON.m */; };
 		BAE7ACC21B8DA2BC00A2B413 /* NSString+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE7ACB51B8DA2BC00A2B413 /* NSString+SBJSON.m */; };
@@ -70,28 +48,6 @@
 		5D58061C9A214C5077236974 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BAE532C91B8CFCDB00EACDBD /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		BAE532CA1B8CFCDB00EACDBD /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
-		BAE7AC801B8D84C300A2B413 /* 0000.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0000.mp3; path = Mp3/0000.mp3; sourceTree = "<group>"; };
-		BAE7AC811B8D84C300A2B413 /* 0001.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0001.mp3; path = Mp3/0001.mp3; sourceTree = "<group>"; };
-		BAE7AC821B8D84C300A2B413 /* 0002.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0002.mp3; path = Mp3/0002.mp3; sourceTree = "<group>"; };
-		BAE7AC831B8D84C300A2B413 /* 0003.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0003.mp3; path = Mp3/0003.mp3; sourceTree = "<group>"; };
-		BAE7AC841B8D84C300A2B413 /* 0004.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0004.mp3; path = Mp3/0004.mp3; sourceTree = "<group>"; };
-		BAE7AC851B8D84C300A2B413 /* 0005.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0005.mp3; path = Mp3/0005.mp3; sourceTree = "<group>"; };
-		BAE7AC861B8D84C300A2B413 /* 0006.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0006.mp3; path = Mp3/0006.mp3; sourceTree = "<group>"; };
-		BAE7AC871B8D84C300A2B413 /* 0007.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0007.mp3; path = Mp3/0007.mp3; sourceTree = "<group>"; };
-		BAE7AC881B8D84C300A2B413 /* 0008.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0008.mp3; path = Mp3/0008.mp3; sourceTree = "<group>"; };
-		BAE7AC891B8D84C300A2B413 /* 0009.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0009.mp3; path = Mp3/0009.mp3; sourceTree = "<group>"; };
-		BAE7AC8A1B8D84C300A2B413 /* 0010.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0010.mp3; path = Mp3/0010.mp3; sourceTree = "<group>"; };
-		BAE7AC8B1B8D84C300A2B413 /* 0011.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0011.mp3; path = Mp3/0011.mp3; sourceTree = "<group>"; };
-		BAE7AC8C1B8D84C300A2B413 /* 0012.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0012.mp3; path = Mp3/0012.mp3; sourceTree = "<group>"; };
-		BAE7AC8D1B8D84C300A2B413 /* 0013.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0013.mp3; path = Mp3/0013.mp3; sourceTree = "<group>"; };
-		BAE7AC8E1B8D84C300A2B413 /* 0014.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0014.mp3; path = Mp3/0014.mp3; sourceTree = "<group>"; };
-		BAE7AC8F1B8D84C300A2B413 /* 0015.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0015.mp3; path = Mp3/0015.mp3; sourceTree = "<group>"; };
-		BAE7AC901B8D84C300A2B413 /* 0016.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0016.mp3; path = Mp3/0016.mp3; sourceTree = "<group>"; };
-		BAE7AC911B8D84C300A2B413 /* 0017.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0017.mp3; path = Mp3/0017.mp3; sourceTree = "<group>"; };
-		BAE7AC921B8D84C300A2B413 /* 0303.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 0303.mp3; path = Mp3/0303.mp3; sourceTree = "<group>"; };
-		BAE7ACA61B8D84D500A2B413 /* bg01.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bg01.mp3; path = Mp3/bg01.mp3; sourceTree = "<group>"; };
-		BAE7ACA71B8D84D500A2B413 /* bg02.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bg02.mp3; path = Mp3/bg02.mp3; sourceTree = "<group>"; };
-		BAE7ACA81B8D84D500A2B413 /* bg03.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = bg03.mp3; path = Mp3/bg03.mp3; sourceTree = "<group>"; };
 		BAE7ACAD1B8D84F900A2B413 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = MBProgressHUD/MBProgressHUD.h; sourceTree = "<group>"; };
 		BAE7ACAE1B8D84F900A2B413 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = MBProgressHUD/MBProgressHUD.m; sourceTree = "<group>"; };
 		BAE7ACB11B8DA2BC00A2B413 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
@@ -175,28 +131,6 @@
 		BAE7AC7F1B8D84B700A2B413 /* Mp3 */ = {
 			isa = PBXGroup;
 			children = (
-				BAE7ACA61B8D84D500A2B413 /* bg01.mp3 */,
-				BAE7ACA71B8D84D500A2B413 /* bg02.mp3 */,
-				BAE7ACA81B8D84D500A2B413 /* bg03.mp3 */,
-				BAE7AC801B8D84C300A2B413 /* 0000.mp3 */,
-				BAE7AC811B8D84C300A2B413 /* 0001.mp3 */,
-				BAE7AC821B8D84C300A2B413 /* 0002.mp3 */,
-				BAE7AC831B8D84C300A2B413 /* 0003.mp3 */,
-				BAE7AC841B8D84C300A2B413 /* 0004.mp3 */,
-				BAE7AC851B8D84C300A2B413 /* 0005.mp3 */,
-				BAE7AC861B8D84C300A2B413 /* 0006.mp3 */,
-				BAE7AC871B8D84C300A2B413 /* 0007.mp3 */,
-				BAE7AC881B8D84C300A2B413 /* 0008.mp3 */,
-				BAE7AC891B8D84C300A2B413 /* 0009.mp3 */,
-				BAE7AC8A1B8D84C300A2B413 /* 0010.mp3 */,
-				BAE7AC8B1B8D84C300A2B413 /* 0011.mp3 */,
-				BAE7AC8C1B8D84C300A2B413 /* 0012.mp3 */,
-				BAE7AC8D1B8D84C300A2B413 /* 0013.mp3 */,
-				BAE7AC8E1B8D84C300A2B413 /* 0014.mp3 */,
-				BAE7AC8F1B8D84C300A2B413 /* 0015.mp3 */,
-				BAE7AC901B8D84C300A2B413 /* 0016.mp3 */,
-				BAE7AC911B8D84C300A2B413 /* 0017.mp3 */,
-				BAE7AC921B8D84C300A2B413 /* 0303.mp3 */,
 			);
 			name = Mp3;
 			sourceTree = "<group>";
@@ -399,31 +333,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BAE7ACA01B8D84C300A2B413 /* 0013.mp3 in Resources */,
-				BAE7AC9D1B8D84C300A2B413 /* 0010.mp3 in Resources */,
-				BAE7ACA11B8D84C300A2B413 /* 0014.mp3 in Resources */,
 				F12283711A604F6500DBCE61 /* Main.storyboard in Resources */,
-				BAE7AC9B1B8D84C300A2B413 /* 0008.mp3 in Resources */,
-				BAE7AC9F1B8D84C300A2B413 /* 0012.mp3 in Resources */,
-				BAE7AC941B8D84C300A2B413 /* 0001.mp3 in Resources */,
-				BAE7AC991B8D84C300A2B413 /* 0006.mp3 in Resources */,
-				BAE7AC981B8D84C300A2B413 /* 0005.mp3 in Resources */,
-				BAE7ACA41B8D84C300A2B413 /* 0017.mp3 in Resources */,
-				BAE7AC971B8D84C300A2B413 /* 0004.mp3 in Resources */,
-				BAE7ACA51B8D84C300A2B413 /* 0303.mp3 in Resources */,
-				BAE7AC931B8D84C300A2B413 /* 0000.mp3 in Resources */,
 				F12283761A604F6500DBCE61 /* LaunchScreen.xib in Resources */,
-				BAE7ACAA1B8D84D500A2B413 /* bg02.mp3 in Resources */,
-				BAE7AC9C1B8D84C300A2B413 /* 0009.mp3 in Resources */,
-				BAE7AC9A1B8D84C300A2B413 /* 0007.mp3 in Resources */,
-				BAE7AC951B8D84C300A2B413 /* 0002.mp3 in Resources */,
-				BAE7ACA91B8D84D500A2B413 /* bg01.mp3 in Resources */,
-				BAE7ACA21B8D84C300A2B413 /* 0015.mp3 in Resources */,
-				BAE7ACA31B8D84C300A2B413 /* 0016.mp3 in Resources */,
-				BAE7AC9E1B8D84C300A2B413 /* 0011.mp3 in Resources */,
-				BAE7AC961B8D84C300A2B413 /* 0003.mp3 in Resources */,
 				F12283731A604F6500DBCE61 /* Images.xcassets in Resources */,
-				BAE7ACAB1B8D84D500A2B413 /* bg03.mp3 in Resources */,
 				476C2C1A1B8CEB5F00038071 /* icon400.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
