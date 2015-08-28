@@ -39,13 +39,16 @@
     [self.view addSubview:mbLoad];
     [mbLoad setDelegate:self];
     [mbLoad show:YES];
+//    self.webView.frame = CGRectMake(0, 50, 120, 460);
+
     
     self.webView.backgroundColor = [UIColor blackColor];
     self.webView.scalesPageToFit = YES;
-    self.webView.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
+    self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
     self.webView.delegate = self;
     self.webView.scrollView.bounces = NO;
     
+//    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com"]]];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:HOME_URL]]];
     
 }
@@ -224,6 +227,16 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     NSLog(@"webViewDidFinishLoad: %@", [webView.request.URL lastPathComponent]);
+//    
+//    NSString* js =
+//    @"var meta = document.createElement('meta'); " \
+//    "meta.setAttribute( 'name', 'viewport' ); " \
+//    "meta.setAttribute( 'content', 'width=760px' ); " \
+//    "document.getElementsByTagName('head')[0].appendChild(meta)";
+//    
+//    [webView stringByEvaluatingJavaScriptFromString: js];
+//
+//    
     if (mbLoad != nil && !mbLoad.isHidden) {
         [mbLoad hide:YES];
     }
