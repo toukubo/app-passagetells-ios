@@ -60,8 +60,7 @@
 
 -(void)resume
 {
-    //NSLog(@"resume: %d", self.needToReload);
-    
+
     if (self.needToReload) {
         [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:HOME_URL]]];
     }
@@ -452,8 +451,7 @@
     NSLog(self.project_name);
     [projectURL appendString:@"/"];
     [projectURL appendString:self.project_name];
-    [projectURL appendString:@"/"];
-    [projectURL appendString:@"/instructions.html"];
+    [projectURL appendString:@"/slider.html#instructions"];
     if([[DataManager sharedManager] onsite]){
 //        [projectURL appendString:@"?onsite=1"];
     }
@@ -463,6 +461,8 @@
     NSURL *url = [NSURL URLWithString: oururl];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    [self.webView stopLoading];
+
     [self.webView loadRequest:request];
 
     
