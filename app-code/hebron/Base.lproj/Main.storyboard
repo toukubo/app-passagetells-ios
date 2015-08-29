@@ -14,7 +14,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8C2-hd-RAe">
-                                <rect key="frame" x="137" y="274" width="47" height="20.5"/>
+                                <rect key="frame" x="137" y="274" width="47" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -23,6 +23,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="yse-af-jdg"/>
                     <connections>
                         <outlet property="status" destination="8C2-hd-RAe" id="pyT-cE-c2b"/>
                     </connections>
@@ -40,7 +41,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="caB-Ov-YFm" kind="relationship" relationship="rootViewController" id="eyT-pn-cq2"/>
+                        <segue destination="caB-Ov-YFm" kind="relationship" relationship="rootViewController" id="ITg-5i-acZ"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TOS-pR-Zzr" userLabel="First Responder" sceneMemberID="firstResponder"/>

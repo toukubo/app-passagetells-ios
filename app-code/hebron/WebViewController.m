@@ -337,6 +337,19 @@
 }
 -(void)downloadMp3s:(NSMutableArray *)mp3FileNames{
     NSMutableArray *savedFiles = [[DataManager sharedManager] mp3Files];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    Mp3File *savedFileFirst = savedFiles[0];
+    if ([fileManager fileExistsAtPath:savedFileFirst.filePath]) { // yes
+            NSLog(@"ファイル群は存在しています");
+    } else {
+            NSLog(@"ファイル群は存在していません");
+        [[[DataManager sharedManager] mp3Files] removeAllObjects];
+        savedFiles = [[DataManager sharedManager] mp3Files];
+    }
+
+
+
     self.mp3FileArray = [[NSMutableArray alloc] init];
     if ([savedFiles count] == 36) {
         [self gotoNextVC];
@@ -353,6 +366,9 @@
             BOOL flag = false;
             
             for (Mp3File *savedFile in savedFiles) {
+                
+ 
+                
                 if ([downFile isEqualToString:savedFile.fileName]) {
                     flag = true;
                     break;
@@ -393,7 +409,13 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Successfully downloaded file to %@", path);
-        
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+
+        if ([fileManager fileExistsAtPath:path]) { // yes
+                NSLog(@"%@は既に存在しています", path);
+        } else {
+                NSLog(@"%@は存在していません", path);
+        }
         [[[DataManager sharedManager] mp3Files] addObject:[[Mp3File alloc] initWith:fileName filePath:path]];
         
         [self.mp3FileArray removeObjectAtIndex:0];

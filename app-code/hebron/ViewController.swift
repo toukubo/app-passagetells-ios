@@ -143,7 +143,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                             for i=0;i<27;i++ { self.audio[i].volume = 0 }
                             //self.audio[0].volume = 1
                             self.audio[0].playFileAsync("0000.mp3", target: self, selector: "PTDidStartPlay")
-                            //SoundFileLoader()
+                            SoundFileLoader()
                             self.manager.startRangingBeaconsInRegion(self.region)
                     default:
                             //unknown error
@@ -388,6 +388,7 @@ println("mark 1 ! --------------")
             BGresume[cBGTRACK] = self.audio[cBGplayer].currentTime - 2
             if newBGTRACK != cBGTRACK {
                 self.audio[cBGplayer].fadeTo(0.2, duration: 0.8, target: self, selector: "BGplayNew");print("BG\(cBGTRACK):FADE0.2,")
+
             } else {
                 self.audio[cBGplayer].fadeTo(volume, duration: 0.8, target: self, selector: "BGDidFade");print("BG\(cBGTRACK):NO-PLAY-FADE\(volume),")
             }
@@ -436,9 +437,28 @@ println("mark 1 ! --------------")
     }
     func SoundFileLoader () {
         for ( i = 1; i < 4; i++ ) {
-            var t = NSString(format: "%04d", SCENE*100+i)
-            self.audio[i].preloadFileAsync("\(t).mp3", target: self, selector: "PTDidLoad")
-            print("\(t).mp3:loaded,")
+            var t = NSString(format: "%04d%@", SCENE*100+i,".mp3")
+            println(t)
+//            var  = DataManager.sharedManager as DataManager
+            var mp3file = DataManager.getMp3File(t as String)// Mp3File(); // ;
+            if(mp3file != nil){
+                var filepath = mp3file.filePath
+                var fileManager = NSFileManager.defaultManager()
+
+                
+                if(fileManager.fileExistsAtPath(filepath)){ // yes
+                        println("既に存在しています");
+                } else {
+                    println("存在していません");
+                }
+                
+                
+                println(mp3file.filePath)
+                println(filepath)
+                
+                self.audio[i].preloadFileAsync(filepath, target: self, selector: "PTDidLoad")
+                print("\(t):loaded,")
+            }
         }
     }
     func PTDidLoad(){

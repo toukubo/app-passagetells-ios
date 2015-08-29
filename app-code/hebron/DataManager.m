@@ -37,6 +37,15 @@ static DataManager *manager = nil;
     [self loadManager];
 }
 
++(Mp3File*)getMp3File: (NSString*)filename {
+    
+    for (Mp3File *mp3file in [[DataManager sharedManager] mp3Files]) {
+        if([mp3file.fileName isEqualToString:filename]){
+            return mp3file;
+        }
+    }
+    return nil;
+}
 -(void)saveManager{
     
     // saving mp3files

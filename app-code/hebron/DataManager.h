@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Common.h"
+@class Mp3File;
 
 @interface DataManager : NSObject
 
@@ -24,5 +26,8 @@
 
 -(void)saveManager;
 -(void)loadManager;
++(Mp3File*)getMp3File: (NSString*)filename ;
+
 
 @end
+
