@@ -13,6 +13,7 @@
 +(id)sharedManager;
 
 @property (nonatomic, retain) NSMutableArray *beaconIDs;
+@property (nonatomic, retain) NSMutableArray *mp3FileNames;
 @property (nonatomic, retain) NSDictionary *beaconID;
 @property (nonatomic, retain) NSString *project_name;
 @property (nonatomic, retain) NSMutableArray *ctrlDatas;
