@@ -339,15 +339,17 @@
     NSMutableArray *savedFiles = [[DataManager sharedManager] mp3Files];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    Mp3File *savedFileFirst = savedFiles[0];
-    if ([fileManager fileExistsAtPath:savedFileFirst.filePath]) { // yes
-            NSLog(@"ファイル群は存在しています");
-    } else {
-            NSLog(@"ファイル群は存在していません");
-        [[[DataManager sharedManager] mp3Files] removeAllObjects];
-        savedFiles = [[DataManager sharedManager] mp3Files];
+    if(savedFiles != nil && [savedFiles count]!=0){
+        Mp3File *savedFileFirst = savedFiles[0];
+        if ([fileManager fileExistsAtPath:savedFileFirst.filePath]) { // yes
+                NSLog(@"ファイル群は存在しています");
+        } else {
+                NSLog(@"ファイル群は存在していません");
+            [[[DataManager sharedManager] mp3Files] removeAllObjects];
+            savedFiles = [[DataManager sharedManager] mp3Files];
+        }
+       
     }
-
 
 
     self.mp3FileArray = [[NSMutableArray alloc] init];
