@@ -58,7 +58,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     var newPOS = 0, cPOS = 0, pPOS = 0
     var SCENE = 0
     var ctrl = "Y"
-    var ctrlrsv = 7, ctrlNrsv = 0, ctrlPrsv = 0, ctrlSrsv = 0 // ctrlrsv = 0: normal, 1: pending, 7: password-locked
+    var ctrlrsv = 0, ctrlNrsv = 0, ctrlPrsv = 0, ctrlSrsv = 0 // ctrlrsv = 0: normal, 1: pending, 7: password-locked
     var newTRACK = "0000", cTRACK = "0000"
     var newBGplayer = 26, cBGplayer = 27
     var newBGTRACK = "00", cBGTRACK = "00"
@@ -138,10 +138,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                             alert.show()
                     case .AuthorizedAlways, .AuthorizedWhenInUse:
                             //Start monitoring
-                            println("Monitoring")
+                            println("Monitoring!")
                             self.status.text = "Playing " + toString(beaconID["version"]!)
                             for i=0;i<27;i++ { self.audio[i].volume = 0 }
-                            //self.audio[0].volume = 1
+                            self.audio[0].volume = 1
                             self.audio[0].playFileAsync("0000.mp3", target: self, selector: "PTDidStartPlay")
                             SoundFileLoader()
                             self.manager.startRangingBeaconsInRegion(self.region)
