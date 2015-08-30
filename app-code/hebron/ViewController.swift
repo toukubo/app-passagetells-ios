@@ -58,7 +58,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     var newPOS = 0, cPOS = 0, pPOS = 0
     var SCENE = 0
     var ctrl = "Y"
-    var ctrlrsv = 7, ctrlNrsv = 0, ctrlPrsv = 0, ctrlSrsv = 0 // ctrlrsv = 0: normal, 1: pending, 7: password-locked
+    var ctrlrsv = 0, ctrlNrsv = 0, ctrlPrsv = 0, ctrlSrsv = 0 // ctrlrsv = 0: normal, 1: pending, 7: password-locked
     var newTRACK = "0000", cTRACK = "0000"
     var newBGplayer = 26, cBGplayer = 27
     var newBGTRACK = "00", cBGTRACK = "00"
@@ -81,6 +81,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     var PTfadeinTrack:[String] = []
     var PTfinalTask = 0
     var PTfinalTrack:[String] = []
+    
 
     var total = [0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0, 18:0, 19:0, 20:0, 21:0, 22:0, 23:0, 24:0, 25:0]
 
@@ -106,6 +107,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             
             println ("no internet connection")
         }
+        
+        
+//        ctrlData = DataManager.getCtrlData()
         
         //create CLBeaconRegion
         region = CLBeaconRegion(proximityUUID:proximityUUID,identifier:"EstimoteRegion")
@@ -138,10 +142,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                             alert.show()
                     case .AuthorizedAlways, .AuthorizedWhenInUse:
                             //Start monitoring
-                            println("Monitoring")
+                            println("Monitoring!")
                             self.status.text = "Playing " + toString(beaconID["version"]!)
                             for i=0;i<27;i++ { self.audio[i].volume = 0 }
-                            //self.audio[0].volume = 1
+                            self.audio[0].volume = 1
                             self.audio[0].playFileAsync("0000.mp3", target: self, selector: "PTDidStartPlay")
                             SoundFileLoader()
                             self.manager.startRangingBeaconsInRegion(self.region)
@@ -332,10 +336,12 @@ println("mark 1 ! --------------")
     }
     
     func PTctrlGet(){
-        if ctrlData[newTRACK] == nil {
+        var ctrlString = ""
+        ctrlString = DataManager.getCtrlData(newTRACK)!;
+        if  ctrlString == "NULL" {
             ctrl = "Y"
         } else {
-            ctrl = ctrlData[newTRACK]!
+            ctrl = DataManager.getCtrlData(newTRACK)!
         }
         print("CTRL:\(newTRACK)\(ctrl)," )
     }
