@@ -81,6 +81,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     var PTfadeinTrack:[String] = []
     var PTfinalTask = 0
     var PTfinalTrack:[String] = []
+    
 
     var total = [0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0, 18:0, 19:0, 20:0, 21:0, 22:0, 23:0, 24:0, 25:0]
 
@@ -106,6 +107,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             
             println ("no internet connection")
         }
+        
+        
+//        ctrlData = DataManager.getCtrlData()
         
         //create CLBeaconRegion
         region = CLBeaconRegion(proximityUUID:proximityUUID,identifier:"EstimoteRegion")
@@ -332,10 +336,12 @@ println("mark 1 ! --------------")
     }
     
     func PTctrlGet(){
-        if ctrlData[newTRACK] == nil {
+        var ctrlString = ""
+        ctrlString = DataManager.getCtrlData(newTRACK)!;
+        if  ctrlString == "NULL" {
             ctrl = "Y"
         } else {
-            ctrl = ctrlData[newTRACK]!
+            ctrl = DataManager.getCtrlData(newTRACK)!
         }
         print("CTRL:\(newTRACK)\(ctrl)," )
     }

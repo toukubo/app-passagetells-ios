@@ -198,7 +198,7 @@
             
             
             // CtrlData.JSON
-            [[[DataManager sharedManager] ctrlDatas] removeAllObjects];
+            [DataManager sharedManager].ctrlDatas = [[NSDictionary alloc] init];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
             [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"ctrldata.json" params:@{} success:^(id successBlock) {
@@ -210,7 +210,8 @@
                 for (NSString *key in [dict allKeys]) {
                     NSString *value = [dict valueForKey:key];
                     
-                    [[[DataManager sharedManager] ctrlDatas] addObject:[[CtrlData alloc] initWith:key ctrlVal:value]];
+                    [DataManager sharedManager].ctrlDatas = dict;
+//                    [[[DataManager sharedManager] ctrlDatas] addObject:[[CtrlData alloc] initWith:key ctrlVal:value]];
                 }
                 
             } error:^(NSError *error) {

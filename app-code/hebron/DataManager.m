@@ -15,7 +15,7 @@
 
 static DataManager *manager = nil;
 
-+(id)sharedManager{
++(DataManager *)sharedManager{
     if (manager == nil) {
         manager = [[DataManager alloc] init];
         
@@ -29,12 +29,20 @@ static DataManager *manager = nil;
     self.mp3FileNames = [[NSMutableArray alloc] init];
     self.beaconID = [[NSDictionary alloc] init];
     self.project_name = [[NSString alloc] init];
-    self.ctrlDatas = [[NSMutableArray alloc] init];
+    self.ctrlDatas = [[NSDictionary alloc] init];
     self.projects = [[NSMutableArray alloc] init];
     self.onsite  =false;
     self.mp3Files = [[NSMutableArray alloc] init];
     
     [self loadManager];
+}
+
++(NSString * __nullable)getCtrlData:(NSString*) key{
+    NSString *returned = [[[DataManager sharedManager] ctrlDatas] valueForKey:key];
+    if ( returned == nil ){
+        return @"NULL";
+    }
+    return [[[DataManager sharedManager] ctrlDatas] valueForKey:key];
 }
 
 +(Mp3File*)getMp3File: (NSString*)filename {

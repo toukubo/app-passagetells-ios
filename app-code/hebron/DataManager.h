@@ -12,13 +12,13 @@
 
 @interface DataManager : NSObject
 
-+(id)sharedManager;
++(DataManager *)sharedManager;
 
 @property (nonatomic, retain) NSMutableArray *beaconIDs;
 @property (nonatomic, retain) NSMutableArray *mp3FileNames;
 @property (nonatomic, retain) NSDictionary *beaconID;
 @property (nonatomic, retain) NSString *project_name;
-@property (nonatomic, retain) NSMutableArray *ctrlDatas;
+@property (nonatomic, retain) NSDictionary *ctrlDatas;
 @property (nonatomic, retain) NSMutableArray *projects;
 @property (nonatomic) BOOL onsite;
 
@@ -27,6 +27,7 @@
 -(void)saveManager;
 -(void)loadManager;
 +(Mp3File*)getMp3File: (NSString*)filename ;
++(NSString * __nullable)getCtrlData:(NSString*) key;
 
 
 @end
