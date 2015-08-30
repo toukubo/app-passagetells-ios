@@ -51,39 +51,62 @@
 //    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com"]]];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:HOME_URL]]];
     
+    [self checkAuthorizationStatus];
 }
-//- (void)checkAuth(){
-//    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
-//        switch alert number {
-//        case 1: //password
-//            println (“alert result - 1”)
-//            let password = alertView.textFieldAtIndex(0)!.text
-//            if password == passwordtoday {
-//                println(“great”)
-//                // save the password by NSUserDefaults
-//                config.setObject(password, forKey:”PASSWORD”)
-//                config.synchronize()
-//                //release the password-lock in the process
-//                ctrlrsv = 0
-//                checkAuthorizationStatus ()
-//            } else {
-//                passwordchecker ()
+
+
+
+-(void)checkAuthorizationStatus {
+    switch ([CLLocationManager authorizationStatus]) {
+        case kCLAuthorizationStatusDenied:// | kCLAuthorizationStatusRestricted:
+        {
+            //Device does not allowed
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service Setting" message:@"The access to location services on this app is restricted/denied. Go to Settings > Privacy > Location Services to change the setting on your phone." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert setTag:2];
+            [alert show];
+            break;
+        }
+        case kCLAuthorizationStatusNotDetermined:
+        {
+            //Asking permission
+//            if ([self.manager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+//                [self.manager requestWhenInUseAuthorization];
 //            }
-//        case 2: //location service restricted/denied
-//            println (“alert result - 2”)
-//            let url = NSURL(string: UIApplicationOpenSettingsURLString)!
-//            UIApplication.sharedApplication().openURL(url)
-//            let alert = UIAlertView(title: “Location Service”, message: “Checking the availability of Location Service on the app.”, delegate: self, cancelButtonTitle: “OK” )
-//            alertnumber = 3
-//            alert.show()
-//        case 3: //location service setting is changed
-//            println (“alert result - 3”)
-//            checkAuthorizationStatus ()
-//        default:
-//            break
-//        }
-//    }
-//}
+//            else {
+//                [self startRangingBeaconInRagion(self.region)];
+//            }
+
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service" message:@"Checking the availability of Location Service on the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert setTag:3];
+            [alert show];
+        }
+        case kCLAuthorizationStatusAuthorizedAlways | kCLAuthorizationStatusAuthorizedWhenInUse:
+        {
+            //Start monitoring
+            NSLog(@"Monitoring");
+
+//            for (int i=0;i<27;i++)
+//            {
+//                self.audio[i].volume = 0
+//            }
+//            //self.audio[0].volume = 1
+//            [self.audio[0] playFileAsync:@"0000.mp3" target:self selector:@"PTDidStartPlay"];
+//            //SoundFileLoader()
+//            [self.manager startRangingBeaconsInRegion:self.region];
+        }
+        default:
+        {
+            //unknown error
+            NSLog(@"Unknown Error");
+
+            break;
+        }
+    }
+}
+
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
