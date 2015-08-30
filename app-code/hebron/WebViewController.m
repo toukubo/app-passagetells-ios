@@ -59,42 +59,48 @@
 -(void)checkAuthorizationStatus {
     switch ([CLLocationManager authorizationStatus]) {
         case kCLAuthorizationStatusDenied:// | kCLAuthorizationStatusRestricted:
-        {//Device does not allowed
+        {
+            //Device does not allowed
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service Setting" message:@"The access to location services on this app is restricted/denied. Go to Settings > Privacy > Location Services to change the setting on your phone." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
             [alert setTag:2];
             [alert show];
-            break;}
+            break;
+        }
         case kCLAuthorizationStatusNotDetermined:
-
+        {
             //Asking permission
-            if ([[[UIDevice currentDevice] systemVersion] substringToIndex:[([self advance:[[UIDevice currentDevice] systemVersion].startIndex index:1])]] >= 8) {
-                //iOS8 and later: call a function to request authorization
-                [self.manager requestWhenInUseAuthorization];
-            }
-            else {
-                [self startRangingBeaconInRagion(self.region)];
-            }
+//            if ([self.manager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+//                [self.manager requestWhenInUseAuthorization];
+//            }
+//            else {
+//                [self startRangingBeaconInRagion(self.region)];
+//            }
 
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service" message:@"Checking the availability of Location Service on the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
             [alert setTag:3];
-            [alert show];}
+            [alert show];
+        }
         case kCLAuthorizationStatusAuthorizedAlways | kCLAuthorizationStatusAuthorizedWhenInUse:
-        {//Start monitoring
+        {
+            //Start monitoring
             NSLog(@"Monitoring");
 
-            for (int i=0;i<27;i++)
-            {
-                self.audio[i].volume = 0
-            }
-            //self.audio[0].volume = 1
-            [self.audio[0] playFileAsync:@"0000.mp3" target:self selector:@"PTDidStartPlay"];
-            //SoundFileLoader()
-            [self.manager startRangingBeaconsInRegion:self.region];}
+//            for (int i=0;i<27;i++)
+//            {
+//                self.audio[i].volume = 0
+//            }
+//            //self.audio[0].volume = 1
+//            [self.audio[0] playFileAsync:@"0000.mp3" target:self selector:@"PTDidStartPlay"];
+//            //SoundFileLoader()
+//            [self.manager startRangingBeaconsInRegion:self.region];
+        }
         default:
-        {//unknown error
+        {
+            //unknown error
             NSLog(@"Unknown Error");
 
-            break;}
+            break;
+        }
     }
 }
 
