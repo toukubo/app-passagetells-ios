@@ -441,7 +441,7 @@ println("mark 1 ! --------------")
         }
     }
     func getPath(filename : String ) -> String {
-       var mp3file = DataManager.getMp3File(t as String)// Mp3File(); // ;
+       var mp3file = DataManager.getMp3File(filename as String)// Mp3File(); // ;
        var filepath = mp3file.filePath as String
        return filepath
     }
