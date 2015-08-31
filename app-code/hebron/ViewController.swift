@@ -118,7 +118,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         manager.delegate = self
         checkAuthorizationStatus();
         
-
     }
         func checkAuthorizationStatus () {
                 switch CLLocationManager.authorizationStatus() {
@@ -146,7 +145,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                             self.status.text = "Playing " + toString(beaconID["version"]!)
                             for i=0;i<27;i++ { self.audio[i].volume = 0 }
                             self.audio[0].volume = 1
-                            self.audio[0].playFileAsync("0000.mp3", target: self, selector: "PTDidStartPlay")
+                            self.audio[0].playFileAsync(getPath("0000.mp3"), target: self, selector: "PTDidStartPlay")
                             SoundFileLoader()
                             self.manager.startRangingBeaconsInRegion(self.region)
                     default:
@@ -366,7 +365,7 @@ println("mark 1 ! --------------")
         PTstopCtrler += [PTfadeoutCtrler[0]]; PTstopTask += 1
         PTfadeoutCtrler.removeAtIndex(0); PTfadeoutTask -= 1
         self.audio[PTplayCtrler[0]].stop()
-        self.audio[PTplayCtrler[0]].playFileAsync("\(PTplayTrack[0]).mp3", target: self, selector: "PTfadein");print("n\(PTplayTrack[0]):PLAY,")
+        self.audio[PTplayCtrler[0]].playFileAsync(getPath("\(PTplayTrack[0]).mp3"), target: self, selector: "PTfadein");print("n\(PTplayTrack[0]):PLAY,")
         PTfadeinCtrler += [PTplayCtrler[0]]; PTfadeinTrack += [PTplayTrack[0]]; PTfadeinTask += 1
         PTplayCtrler.removeAtIndex(0); PTplayTrack.removeAtIndex(0); PTplayTask -= 1
     }
@@ -403,7 +402,7 @@ println("mark 1 ! --------------")
     func BGplayNew(){
         self.audio[cBGplayer].fadeTo(0, duration: 1, target: self, selector: "BGstop");print("BG\(cBGTRACK):FADE0,")
         self.audio[newBGplayer].stop()
-        self.audio[newBGplayer].playFileAsync("bg\(newBGTRACK).mp3", target: self, selector: "BGfadein");print("BG\(newBGTRACK):PLAY,")
+        self.audio[newBGplayer].playFileAsync(getPath("bg\(newBGTRACK).mp3"), target: self, selector: "BGfadein");print("BG\(newBGTRACK):PLAY,")
     }
     func BGstop(){
         self.audio[cBGplayer].stop();print("BG\(cBGTRACK):STOP#")
@@ -441,6 +440,11 @@ println("mark 1 ! --------------")
             print("Fade:bg\(newBGTRACK).mp3,")
         }
     }
+    func getPath(filename : String ) -> String {
+       var mp3file = DataManager.getMp3File(t as String)// Mp3File(); // ;
+       var filepath = mp3file.filePath as String
+       return filepath
+    }
     func SoundFileLoader () {
         for ( i = 1; i < 4; i++ ) {
             var t = NSString(format: "%04d%@", SCENE*100+i,".mp3")
@@ -450,15 +454,11 @@ println("mark 1 ! --------------")
             if(mp3file != nil){
                 var filepath = mp3file.filePath
                 var fileManager = NSFileManager.defaultManager()
-
-                
                 if(fileManager.fileExistsAtPath(filepath)){ // yes
                         println("既に存在しています");
                 } else {
                     println("存在していません");
                 }
-                
-                
                 println(mp3file.filePath)
                 println(filepath)
                 
