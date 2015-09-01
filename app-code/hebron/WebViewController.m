@@ -348,8 +348,17 @@
     } else if ([[request.URL scheme] isEqual:@"mailto"] || [[request.URL scheme] isEqual:@"tel"]) {
         [[UIApplication sharedApplication] openURL:request.URL];
         return NO;
-    } else {
+    } else if ([[request.URL scheme] isEqual:@"comgooglemaps"]) {
+//        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
+            [[UIApplication sharedApplication] openURL:request.URL];
+//        } else {
+//            NSLog(@"Can't use comgooglemaps://");
+//        }
         
+    }else{
+        
+//        [[UIApplication sharedApplication] openURL:request.URL];
+
     }
     return YES;
     
