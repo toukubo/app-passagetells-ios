@@ -128,7 +128,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                             alertnumber = 2
                             alert.show()
                     case .NotDetermined:
-                            self.status.text = "Restart the app"
+                            self.status.text = "Restricted, denied or not Determined"
                             //Asking permission
                             if(UIDevice.currentDevice().systemVersion.substringToIndex(advance(UIDevice.currentDevice().systemVersion.startIndex,1)).toInt() >= 8){
                                     //iOS8 and later: call a function to request authorization
@@ -139,6 +139,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                             let alert = UIAlertView(title: "Location Service", message: "Checking the availability of Location Service on the app.", delegate: self, cancelButtonTitle: "OK" )
                             alertnumber = 3
                             alert.show()
+                            checkAuthorizationStatus();
                     case .AuthorizedAlways, .AuthorizedWhenInUse:
                             //Start monitoring
                             println("Monitoring!")

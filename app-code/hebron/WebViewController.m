@@ -21,6 +21,9 @@
 @property (readwrite) NSString *project_id;
 @property (readwrite) NSString *beaconsIDSelf;
 
+@property(strong, nonatomic) CLBeaconRegion *beaconRegion;
+@property(strong, nonatomic) CBPeripheralManager *peripheralManager;
+@property(strong, nonatomic) NSDictionary *peripheralData;
 
 @end
 
@@ -30,6 +33,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
     
     self.navigationController.navigationBarHidden = YES;
     
@@ -58,32 +65,39 @@
 
 -(void)checkAuthorizationStatus {
     switch ([CLLocationManager authorizationStatus]) {
-        case kCLAuthorizationStatusDenied:// | kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusDenied:
+        case kCLAuthorizationStatusRestricted:
         {
             //Device does not allowed
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service Setting" message:@"The access to location services on this app is restricted/denied. Go to Settings > Privacy > Location Services to change the setting on your phone." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert setTag:2];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service Setting" message:@"The access to location services on this app is restricted/denied. Go to Settings > Privacy > Location Services to change the setting on your phone." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: @"Cancel", nil];
+            [alert setTag:1];
             [alert show];
             break;
         }
         case kCLAuthorizationStatusNotDetermined:
         {
             //Asking permission
-//            if ([self.manager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-//                [self.manager requestWhenInUseAuthorization];
-//            }
-//            else {
-//                [self startRangingBeaconInRagion(self.region)];
-//            }
+            if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+                [self.locationManager requestWhenInUseAuthorization];
+                NSLog(@"requestWhenInUseAuthorization!!!");
+            }
+            else {
+                [self.locationManager startRangingBeaconsInRegion:self.beaconRegion];
+                NSLog(@"startRangingBeaconsInRegion!!!");
+            }
 
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service" message:@"Checking the availability of Location Service on the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
-            [alert setTag:3];
+            [alert setTag:2];
             [alert show];
+            break;
         }
-        case kCLAuthorizationStatusAuthorizedAlways | kCLAuthorizationStatusAuthorizedWhenInUse:
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
         {
             //Start monitoring
+            NSLog(@"Location Service has been Authorized");
             NSLog(@"Monitoring");
+            break;
 
 //            for (int i=0;i<27;i++)
 //            {
@@ -97,7 +111,7 @@
         default:
         {
             //unknown error
-            NSLog(@"Unknown Error");
+            NSLog(@"unknown value in authorizationStatus");
 
             break;
         }
@@ -125,10 +139,32 @@
 
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex{
     NSLog(@"clickedButtonAtIndex: %lu", (unsigned long)buttonIndex);
-    if(buttonIndex == 0) {
-        // "retry" selected: try to load "Top" page
-        return [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:HOME_URL]]];
+    
+    switch([actionSheet tag]){
+        case 0: { //when internet connection is refused
+            if(buttonIndex == 0) {
+            // "retry" selected: try to load "Top" page
+            return [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:HOME_URL]]];
+            }
+        }
+        case 1: { //Location Service Denied
+            if(buttonIndex == 0) {
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString: UIApplicationOpenSettingsURLString]];
+            }
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Service" message:@"Checking the availability of Location Service on the app." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert setTag:2];
+            [alert show];
+            break;
+        }
+        case 2: { //Location Service Not Determined
+            [self checkAuthorizationStatus];
+            break;
+        }
+        default: {
+            break;
+        }
     }
+    
     
     // "close" selected
     // XXX: reset
@@ -347,9 +383,10 @@
         return;
     }
     
-    NSString *desc = @"通信できませんでした。\n再度お試しください。";
+    NSString *desc = @"The app doesn't have internet connection. Please try again.";
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Passagetells" message:desc delegate:self
                                           cancelButtonTitle:@"Retry" otherButtonTitles:@"Close", nil];
+    [alert setTag:0];
     [alert show];
 }
 
@@ -366,9 +403,9 @@
     if(savedFiles != nil && [savedFiles count]!=0){
         Mp3File *savedFileFirst = savedFiles[0];
         if ([fileManager fileExistsAtPath:savedFileFirst.filePath]) { // yes
-                NSLog(@"ファイル群は存在しています");
+                NSLog(@"The files do exist");
         } else {
-                NSLog(@"ファイル群は存在していません");
+                NSLog(@"The files do not exist");
             [[[DataManager sharedManager] mp3Files] removeAllObjects];
             savedFiles = [[DataManager sharedManager] mp3Files];
         }
@@ -438,9 +475,9 @@
         NSFileManager *fileManager = [NSFileManager defaultManager];
 
         if ([fileManager fileExistsAtPath:path]) { // yes
-                NSLog(@"%@は既に存在しています", path);
+                NSLog(@"%@ has been downloaded", path);
         } else {
-                NSLog(@"%@は存在していません", path);
+                NSLog(@"%@hasn't been downloaded", path);
         }
         [[[DataManager sharedManager] mp3Files] addObject:[[Mp3File alloc] initWith:fileName filePath:path]];
         
