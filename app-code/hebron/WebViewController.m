@@ -536,7 +536,7 @@
     NSLog(self.project_name);
     [projectURL appendString:@"/"];
     [projectURL appendString:self.project_name];
-    [projectURL appendString:@"/slider.html#instructions"];
+    [projectURL appendString:@"/slider.html"];
     if([[DataManager sharedManager] onsite]){
         [projectURL appendString:@"?onsite=1"];
     }
@@ -579,6 +579,9 @@
         CLBeacon *beacon = [ViewController getBeacon:beacons beaconID: [[DataManager sharedManager] beaconID]];
         if(beacon!=nil){
             [[DataManager sharedManager] setOnsite:TRUE];
+            if([DataManager sharedManager].onsite==false){
+                [self gotoNextVC];
+            }
             NSLog(@"mark 5 beacon in the ids found. set on site. ");
         }
         
