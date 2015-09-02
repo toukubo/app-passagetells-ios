@@ -25,7 +25,8 @@ import AVFoundation
 class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralDelegate {
     
     @IBOutlet weak var status: UILabel!
-    
+
+    @IBOutlet weak var btnClose: UIButton!
     //UUID -> NSUUID
     let proximityUUID = NSUUID(UUIDString:"B9407F30-F5F8-466E-AFF9-25556B57FE6D")
     var region  = CLBeaconRegion()
@@ -116,6 +117,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     
         //setting deligate
         manager.delegate = self
+        self.btnClose.hidden = true;
+
         checkAuthorizationStatus();
         
     }
@@ -144,6 +147,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                             //Start monitoring
                             println("Monitoring!")
                             self.status.text = "Playing " + toString(beaconID["version"]!)
+                            self.btnClose.hidden = false;
+
                             for i=0;i<27;i++ { self.audio[i].volume = 0 }
                             self.audio[0].volume = 1
                             self.audio[0].playFileAsync(getPath("0000.mp3"), target: self, selector: "PTDidStartPlay")
@@ -442,6 +447,7 @@ println("mark 1 ! --------------")
         }
     }
     func getPath(filename : String ) -> String {
+
        var mp3file = DataManager.getMp3File(filename as String)// Mp3File(); // ;
        var filepath = mp3file.filePath as String
        return filepath
@@ -527,5 +533,20 @@ println("mark 1 ! --------------")
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+
+ 
+    @IBAction func closeButtonTouched(sender: AnyObject) {
+        
+        println("hogehoge")
+        var WebVC : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("WebViewController")
+        self.navigationController!.pushViewController(WebVC as! UIViewController,animated: true)
+        
+        
+        
+    }
+    
+    
+    
     
 }

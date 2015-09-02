@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F25a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="BSX-4X-RfF">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="BSX-4X-RfF">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
@@ -20,17 +20,28 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EIP-Bv-juW">
+                                <rect key="frame" x="147" y="241" width="27" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="btnClose" image="closeicon.jpeg">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="closeButtonTouched:" destination="BYZ-38-t0r" eventType="touchDown" id="hzZ-Vs-r1R"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="yse-af-jdg"/>
                     <connections>
+                        <outlet property="btnClose" destination="EIP-Bv-juW" id="gKF-H6-mS7"/>
                         <outlet property="status" destination="8C2-hd-RAe" id="pyT-cE-c2b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="789.86666666666667" y="53.013333333333335"/>
+            <point key="canvasLocation" x="789" y="53"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="iKS-0Q-ukO">
@@ -41,7 +52,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="caB-Ov-YFm" kind="relationship" relationship="rootViewController" id="ITg-5i-acZ"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="69S-kp-2oj"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TOS-pR-Zzr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -74,6 +85,9 @@
             <point key="canvasLocation" x="416" y="53.013333333333335"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="closeicon.jpeg" width="225" height="225"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

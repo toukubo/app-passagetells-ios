@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		473E0BA11B8E594B00777AB0 /* BeaconListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E0BA01B8E594B00777AB0 /* BeaconListener.swift */; };
 		476C2C1A1B8CEB5F00038071 /* icon400.png in Resources */ = {isa = PBXBuildFile; fileRef = 476C2C191B8CEB5F00038071 /* icon400.png */; };
+		47D7D4BE1B97274A0048C0E9 /* closeicon.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 47D7D4BD1B97274A0048C0E9 /* closeicon.jpeg */; };
 		BAE532CB1B8CFCDB00EACDBD /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE532CA1B8CFCDB00EACDBD /* WebViewController.m */; };
 		BAE7ACAF1B8D84F900A2B413 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE7ACAE1B8D84F900A2B413 /* MBProgressHUD.m */; };
 		BAE7ACC11B8DA2BC00A2B413 /* NSObject+SBJSON.m in Sources */ = {isa = PBXBuildFile; fileRef = BAE7ACB31B8DA2BC00A2B413 /* NSObject+SBJSON.m */; };
@@ -45,6 +46,7 @@
 		24A700C9A539A69079D08BBE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		473E0BA01B8E594B00777AB0 /* BeaconListener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeaconListener.swift; sourceTree = "<group>"; };
 		476C2C191B8CEB5F00038071 /* icon400.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon400.png; sourceTree = "<group>"; };
+		47D7D4BD1B97274A0048C0E9 /* closeicon.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = closeicon.jpeg; sourceTree = "<group>"; };
 		5D58061C9A214C5077236974 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		BAE532C91B8CFCDB00EACDBD /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
 		BAE532CA1B8CFCDB00EACDBD /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		BAE7AC7F1B8D84B700A2B413 /* Mp3 */ = {
 			isa = PBXGroup;
 			children = (
+				47D7D4BD1B97274A0048C0E9 /* closeicon.jpeg */,
 			);
 			name = Mp3;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F12283711A604F6500DBCE61 /* Main.storyboard in Resources */,
+				47D7D4BE1B97274A0048C0E9 /* closeicon.jpeg in Resources */,
 				F12283761A604F6500DBCE61 /* LaunchScreen.xib in Resources */,
 				F12283731A604F6500DBCE61 /* Images.xcassets in Resources */,
 				476C2C1A1B8CEB5F00038071 /* icon400.png in Resources */,
