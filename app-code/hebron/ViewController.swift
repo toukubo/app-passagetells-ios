@@ -217,7 +217,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     static func  getBeacon(beacons:[AnyObject]!,beaconID:NSDictionary) -> CLBeacon?{
         var ii = -1, iii = 0
         var ttt = ""
-
+        
         for var i = 0; i < beacons.count; i++ {
             var beacon = beacons[i] as! CLBeacon
             var ttt = "\(beacon.minor):\(beacon.accuracy):\(beacon.rssi):"
@@ -240,8 +240,18 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             return nil
         }
         var beacon = beacons[ii] as! CLBeacon
+        println("beacon detected: \(beacon)")
         return beacon;
         
+    }
+    static func  beaconcatcher(beacons:[AnyObject]!,beaconID:NSDictionary) -> String?{
+        var beaconcatching = ""
+        for var i = 0; i < beacons.count; i++ {
+            var beacon = beacons[i] as! CLBeacon
+            beaconcatching += beaconID["\(beacon.major)\(beacon.minor)"]!.description!
+        }
+        println("beaconcatching:?:\(beaconcatching)")
+        return beaconcatching
     }
     
     /*

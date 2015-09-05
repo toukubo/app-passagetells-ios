@@ -291,6 +291,7 @@
             
             ///////////// downloading beacons
             if([[[DataManager sharedManager] beaconID] count]==0){
+                
                 [[DataManager sharedManager] setBeaconID:[BeaconListner parseIntoDictionary]];
             }
             
@@ -304,7 +305,7 @@
             CLBeaconRegion *region =         [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID identifier:@"EstimoteRegion"];
             
             [self.locationManager startRangingBeaconsInRegion:region];
-            
+
 
             
             // mp3s
@@ -318,7 +319,7 @@
                 NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
                 NSLog(theJson);
                 NSArray *array = [theJson JSONValue];
-//                
+//
 //                for (NSString *key in [dict allKeys]) {
 //                    //                    NSString *value = [dict valueForKey:key];
 //                    NSLog(key);
@@ -336,25 +337,55 @@
             
             
             
-            
 
-        }else  if([actionsAndParams rangeOfString:@"ok"].location != NSNotFound) {
+        }else  if([actionsAndParams rangeOfString:@"understood"].location != NSNotFound) {
+            
+            NSMutableString *projectURL = [NSMutableString stringWithString:HOME_URL];
+            [ projectURL appendString:@"/"];
+            [projectURL appendString:self.project_name];
+            [projectURL appendString:@"/start.html"];
+            NSLog(projectURL);
+            NSString *oururl = [NSString stringWithString:projectURL];
+            NSLog(oururl);
+            NSURL* url = [NSURL URLWithString: oururl];
+            
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+            
+            [webView loadRequest:request];
+
+            
+        }else  if([actionsAndParams rangeOfString:@"play"].location != NSNotFound) {
             
             ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
             [self.navigationController pushViewController:vc animated:YES];
             
         }
         return NO;
+    } else if([[request.URL scheme] isEqual:@"safari"]) {
+        
+        NSString *filePath= [request.URL absoluteString];
+        NSString *filePatha = [filePath stringByReplacingOccurrencesOfString:@"safari" withString:@"http"];
+        NSLog(filePatha);
+        NSURL *fileURL = [NSURL URLWithString:filePatha];
+        [[UIApplication sharedApplication] openURL:fileURL];
+        
+        return NO;
     } else if ([[request.URL scheme] isEqual:@"mailto"] || [[request.URL scheme] isEqual:@"tel"]) {
         [[UIApplication sharedApplication] openURL:request.URL];
         return NO;
     } else if ([[request.URL scheme] isEqual:@"comgooglemaps"]) {
-//        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
+        if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"comgooglemaps://"]]) {
             [[UIApplication sharedApplication] openURL:request.URL];
-//        } else {
-//            NSLog(@"Can't use comgooglemaps://");
-//        }
-        
+        } else {
+            NSLog(@"Can't use comgooglemaps://");
+            NSString *filePath= [request.URL absoluteString];
+            NSString *filePatha = [filePath stringByReplacingOccurrencesOfString:@"comgooglemaps://" withString:@"http://maps.apple.com/"];
+            NSLog(filePatha);
+            NSURL *fileURL = [NSURL URLWithString:filePatha];
+            [[UIApplication sharedApplication] openURL:fileURL];
+
+        }
+        return NO;
     }else{
         
 //        [[UIApplication sharedApplication] openURL:request.URL];
@@ -412,9 +443,13 @@
     if(savedFiles != nil && [savedFiles count]!=0){
         Mp3File *savedFileFirst = savedFiles[0];
         if ([fileManager fileExistsAtPath:savedFileFirst.filePath]) { // yes
-                NSLog(@"The files do exist");
+            NSLog(@"The files do exist");
+            //[NSString stringWithFormat:@"%@ %@",@"Downloading",savedFileFirst.filePath]
+            //[_sysmsg setText:@"The files do exist"];
+            
         } else {
-                NSLog(@"The files do not exist");
+            NSLog(@"The files do not exist");
+            //[_sysmsg setText:@"The files do not exist"];
             [[[DataManager sharedManager] mp3Files] removeAllObjects];
             savedFiles = [[DataManager sharedManager] mp3Files];
         }
@@ -424,6 +459,7 @@
 
     self.mp3FileArray = [[NSMutableArray alloc] init];
     if ([savedFiles count] == 36) {
+        [_sysmsg setText:@"count==36"];
         [self gotoNextVC];
         return;
     }    else if ([savedFiles count] == 0) {
@@ -460,6 +496,8 @@
         [self downloadMp3File:(NSString*)self.mp3FileArray[0]];
     }else{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [_sysmsg setText:@"mp3FileArray count==0"];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
         [self gotoNextVC];
     }
 }
@@ -481,12 +519,17 @@
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Successfully downloaded file to %@", path);
+        
         NSFileManager *fileManager = [NSFileManager defaultManager];
 
         if ([fileManager fileExistsAtPath:path]) { // yes
                 NSLog(@"%@ has been downloaded", path);
+                //[_sysmsg setText:[NSString stringWithFormat:@"%@ %s",path, " has been downloaded"]];
+            
         } else {
                 NSLog(@"%@hasn't been downloaded", path);
+                //[_sysmsg setText:[NSString stringWithFormat:@"%@ %s",path, " hasn't been downloaded"]];
+            
         }
         [[[DataManager sharedManager] mp3Files] addObject:[[Mp3File alloc] initWith:fileName filePath:path]];
         
@@ -496,6 +539,7 @@
             // Finish Downloading and Goto Main VC
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSLog(urlString);
+            [_sysmsg setText:@"Finish DL"];
             [self gotoNextVC];
         }        else        {
             [self downloadMp3File:(NSString*)self.mp3FileArray[0]];
@@ -507,12 +551,13 @@
         if ([self.mp3FileArray count] == 0) {
             // Finish Downloading and Goto Main VC
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            
+            [_sysmsg setText:@"Finish DL (with errors)"];
             [self gotoNextVC];
         }     else     {
             [self.mp3FileArray removeObjectAtIndex:0];
             if ([self.mp3FileArray count] == 0) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+                [_sysmsg setText:@"Finish DL (after removeObjectIndex)"];
                 [self gotoNextVC];
                 
             }else{
@@ -562,29 +607,40 @@
 #pragma mark - Location Manager
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
     NSLog(@"mark 3 location manager called.");
-    if(beacons ==nil){
-        NSLog(@"beacons are nil but didRange called");
+    if([beacons count]==0){
+        NSLog(@"beacons are 0 but didRange called");
     }else{
-        NSLog(@"beacons are NOT nil and didRange called");
-        
+        NSLog(@"beacons are NOT 0 and didRange called");
         
         if([beacons count] == 0) { return; }
-        NSLog(@"beacons count is not 0");
+        //NSLog(@"beacons count is not 0");
         NSLog(@"%d",[beacons count]);
         if([[DataManager sharedManager] beaconID]==nil){
             NSLog(@"and beacon id is null");
         }
-        NSLog(@"%l",[[[DataManager sharedManager] beaconID] count]);
+        //NSLog(@"%l",[[[DataManager sharedManager] beaconID] count]);
         
-        CLBeacon *beacon = [ViewController getBeacon:beacons beaconID: [[DataManager sharedManager] beaconID]];
-        if(beacon!=nil){
-            [[DataManager sharedManager] setOnsite:TRUE];
-            if([DataManager sharedManager].onsite==false){
-                [self gotoNextVC];
+        //CLBeacon *beacon = [ViewController getBeacon:beacons beaconID: [[DataManager sharedManager] beaconID]];
+        
+        //beaconIDと発見されたbeaconを比較して返す（登録なしの場合は””が返る）
+        //NSString *beaconcatched = [ViewController beaconcatcher:beacons beaconID: [[DataManager sharedManager] beaconID]];
+        
+/* underconstruction
+        if(beaconcatched!=@""){
+            
+            if([[DataManager sharedManager] onsite]){
+                [_sysmsg setText:@"setOnsite: onsite=true"];
+            } else {
+                [_sysmsg setText:@"setOnsite: onsite=false"];
+            
             }
+            [[DataManager sharedManager] setOnsite:TRUE];
+//            if([DataManager sharedManager].onsite==false){
+//                [self gotoNextVC];
+//            }
             NSLog(@"mark 5 beacon in the ids found. set on site. ");
         }
-        
+*/
     }
     
     

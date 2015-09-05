@@ -14,6 +14,7 @@
 
 @interface WebViewController : UIViewController  <UIWebViewDelegate, MBProgressHUDDelegate,CLLocationManagerDelegate,CBPeripheralDelegate>
 
+@property (weak, nonatomic) IBOutlet UILabel *sysmsg;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 @property (readwrite) CLLocationManager *locationManager;
 
