@@ -671,10 +671,12 @@
                     if([[DataManager sharedManager].project_firstbeacon isEqualToString: beaconmajorminor]){
                         if([DataManager sharedManager].downloadcompleted==true && [DataManager sharedManager].readytoPlay > 4 ){
                             [_sysmsg setText:@"Play!!!"];
+                            /*
+                            [self.locationManager stopRangingBeaconsInRegion:region];
+                            [self.locationManager stopMonitoringForRegion:region];
+                            */
                             ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
-                            [self.navigationController pushViewController:vc animated:YES];
-                            
-                            
+                            [self.navigationController pushViewController:vc animated:YES];        
                             
                         } else {
                             [DataManager sharedManager].readytoPlay++;
