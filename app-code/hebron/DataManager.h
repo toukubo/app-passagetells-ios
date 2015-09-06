@@ -18,9 +18,13 @@
 @property (nonatomic, retain) NSMutableArray *mp3FileNames;
 @property (nonatomic, retain) NSDictionary *beaconID;
 @property (nonatomic, retain) NSString *project_name;
+@property (nonatomic, retain) NSString *project_url;
+@property (nonatomic, retain) NSString *project_firstbeacon;
 @property (nonatomic, retain) NSDictionary *ctrlDatas;
 @property (nonatomic, retain) NSMutableArray *projects;
 @property (nonatomic) BOOL onsite;
+@property (nonatomic) BOOL downloadcompleted;
+@property (nonatomic) int readytoPlay;
 
 @property (nonatomic, retain) NSMutableArray *mp3Files;
 

@@ -29,9 +29,13 @@ static DataManager *manager = nil;
     self.mp3FileNames = [[NSMutableArray alloc] init];
     self.beaconID = [[NSDictionary alloc] init];
     self.project_name = [[NSString alloc] init];
+    self.project_url = [[NSString alloc] init];
+    self.project_firstbeacon = [[NSString alloc] init];
     self.ctrlDatas = [[NSDictionary alloc] init];
     self.projects = [[NSMutableArray alloc] init];
-    self.onsite  =false;
+    self.onsite  = false;
+    self.downloadcompleted  = false;
+    self.readytoPlay = 0;
     self.mp3Files = [[NSMutableArray alloc] init];
     
     [self loadManager];

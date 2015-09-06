@@ -217,7 +217,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     static func  getBeacon(beacons:[AnyObject]!,beaconID:NSDictionary) -> CLBeacon?{
         var ii = -1, iii = 0
         var ttt = ""
-        
+        println("getBeacon: ")
         for var i = 0; i < beacons.count; i++ {
             var beacon = beacons[i] as! CLBeacon
             var ttt = "\(beacon.minor):\(beacon.accuracy):\(beacon.rssi):"
@@ -230,8 +230,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             } else if (beacon.proximity == CLProximity.Far) {
                 ttt += "Far\n"
             }
+            println("\(beacon.minor): \(ttt)")
             if (beacon.proximity != CLProximity.Unknown && beaconID["\(beacon.major)\(beacon.minor)"] != nil && iii == 0) {
                 ii = i  // save the first one's number
+                iii = 1
             }
         }
         //D/ self.beaconlist.text = t + tt;
@@ -244,7 +246,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         return beacon;
         
     }
-    static func  beaconcatcher(beacons:[AnyObject]!,beaconID:NSDictionary) -> String?{
+/*
+        static func  beaconcatcher(beacons:[AnyObject]!,beaconID:NSDictionary) -> String?{
         var beaconcatching = ""
         for var i = 0; i < beacons.count; i++ {
             var beacon = beacons[i] as! CLBeacon
@@ -253,6 +256,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         println("beaconcatching:?:\(beaconcatching)")
         return beaconcatching
     }
+*/
     
     /*
     Delicate method reciving beacons

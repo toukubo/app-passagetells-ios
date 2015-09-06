@@ -19,7 +19,10 @@
 
 @property (readwrite) NSString *project_name;
 @property (readwrite) NSString *project_id;
+@property (readwrite) NSMutableString *project_url;
+@property (readwrite) NSString *project_firstbeacon;
 @property (readwrite) NSString *beaconsIDSelf;
+
 
 @property(strong, nonatomic) CLBeaconRegion *beaconRegion;
 @property(strong, nonatomic) CBPeripheralManager *peripheralManager;
@@ -206,16 +209,24 @@
             //parse the url
             self.project_id = (NSString*)[queryStringDictionary objectForKey:@"id"];
             self.project_name = (NSString*)[queryStringDictionary objectForKey:@"name"];
+            
             [[DataManager sharedManager] setProject_name:self.project_name];
+            
+            NSLog(@"project_id / project_name: ");
             NSLog(self.project_id);
             NSLog(self.project_name);
-            NSLog(@"was the project id");
-            NSMutableString *projectURL = [NSMutableString stringWithString:HOME_URL];
-            [ projectURL appendString:@"/"];
-            [projectURL appendString:self.project_name];
-            [projectURL appendString:@"/intro.html"];
-            NSLog(projectURL);
-            NSString *oururl = [NSString stringWithString:projectURL];
+            self.project_url = [NSMutableString stringWithString:HOME_URL];
+            [self.project_url appendString:self.project_name];
+            [self.project_url appendString:@"/"];
+            
+            [[DataManager sharedManager] setProject_url:self.project_url];
+            NSLog(@"project_url: ");
+            NSLog([[DataManager sharedManager] project_url]);
+
+            NSMutableString *fileURL = [NSMutableString stringWithString:self.project_url];
+            [fileURL appendString:@"intro.html"];
+            NSString *oururl = [NSString stringWithString:fileURL];
+            NSLog(@"Showing: ");
             NSLog(oururl);
             NSURL* url = [NSURL URLWithString: oururl];
             
@@ -237,10 +248,13 @@
             [DataManager sharedManager].ctrlDatas = [[NSDictionary alloc] init];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
-            [[AFNetManager sharedManager] sendGETRequestTo:BASE_URL path:@"ctrldata.json" params:@{} success:^(id successBlock) {
+            NSLog(@"location of ctrldata: ");
+            NSLog([[DataManager sharedManager] project_url]);
+            [[AFNetManager sharedManager] sendGETRequestTo:[[DataManager sharedManager] project_url] path:@"ctrldata.json" params:@{} success:^(id successBlock) {
                 
                 NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
-                
+                NSLog(@"ctrldata: ");
+                NSLog(theJson);
                 NSDictionary *dict = [theJson JSONValue];
                 
                 for (NSString *key in [dict allKeys]) {
@@ -279,15 +293,25 @@
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 
             }];
-            
-            
-     
-           
-           
-            
-            
 
+
+            //firstbeacon.txt
+            //[DataManager sharedManager].ctrlDatas = [[NSDictionary alloc] init];
+            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
+            [[AFNetManager sharedManager] sendGETRequestTo:[[DataManager sharedManager] project_url] path:@"firstbeacon.txt" params:@{} success:^(id successBlock) {
+                
+                self.project_firstbeacon = [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
+                NSLog(@"firstbeacon.txt: ");
+                NSLog(self.project_firstbeacon);
+                [[DataManager sharedManager] setProject_firstbeacon:self.project_firstbeacon];
+                
+            } error:^(NSError *error) {
+                NSLog(@"Please check your internet connection.");
+                
+                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+            }];
+
             
             ///////////// downloading beacons
             if([[[DataManager sharedManager] beaconID] count]==0){
@@ -312,11 +336,12 @@
             [[[DataManager sharedManager] mp3FileNames] removeAllObjects];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
-            NSString *mp3sjsonurl = [NSString stringWithFormat:@"%@/%@/",HOME_URL,[[DataManager sharedManager] project_name]];
+            NSString *mp3sjsonurl = [NSString stringWithFormat:@"%@%@/",HOME_URL,[[DataManager sharedManager] project_name]];
             NSLog(mp3sjsonurl);
             [[AFNetManager sharedManager] sendGETRequestTo:mp3sjsonurl path:@"mp3s.json" params:@{} success:^(id successBlock) {
                 
                 NSString *theJson= [[NSString alloc] initWithData:successBlock encoding:NSUTF8StringEncoding];
+                NSLog(@"mp3s: ");
                 NSLog(theJson);
                 NSArray *array = [theJson JSONValue];
 //
@@ -339,13 +364,12 @@
             
 
         }else  if([actionsAndParams rangeOfString:@"understood"].location != NSNotFound) {
-            
-            NSMutableString *projectURL = [NSMutableString stringWithString:HOME_URL];
-            [ projectURL appendString:@"/"];
-            [projectURL appendString:self.project_name];
-            [projectURL appendString:@"/start.html"];
-            NSLog(projectURL);
-            NSString *oururl = [NSString stringWithString:projectURL];
+             [[DataManager sharedManager] setReadytoPlay:1];
+            NSLog(@"understood: ");
+            NSLog(@"%d",[DataManager sharedManager].readytoPlay);
+            NSMutableString *fileURL = [NSMutableString stringWithString:[[DataManager sharedManager] project_url]];
+            [fileURL appendString:@"start.html"];
+            NSString *oururl = [NSString stringWithString:fileURL];
             NSLog(oururl);
             NSURL* url = [NSURL URLWithString: oururl];
             
@@ -366,8 +390,8 @@
         NSString *filePath= [request.URL absoluteString];
         NSString *filePatha = [filePath stringByReplacingOccurrencesOfString:@"safari" withString:@"http"];
         NSLog(filePatha);
-        NSURL *fileURL = [NSURL URLWithString:filePatha];
-        [[UIApplication sharedApplication] openURL:fileURL];
+        NSURL *linkURL = [NSURL URLWithString:filePatha];
+        [[UIApplication sharedApplication] openURL:linkURL];
         
         return NO;
     } else if ([[request.URL scheme] isEqual:@"mailto"] || [[request.URL scheme] isEqual:@"tel"]) {
@@ -381,8 +405,8 @@
             NSString *filePath= [request.URL absoluteString];
             NSString *filePatha = [filePath stringByReplacingOccurrencesOfString:@"comgooglemaps://" withString:@"http://maps.apple.com/"];
             NSLog(filePatha);
-            NSURL *fileURL = [NSURL URLWithString:filePatha];
-            [[UIApplication sharedApplication] openURL:fileURL];
+            NSURL *linkURL = [NSURL URLWithString:filePatha];
+            [[UIApplication sharedApplication] openURL:linkURL];
 
         }
         return NO;
@@ -396,6 +420,7 @@
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [[NSURLCache sharedURLCache] removeAllCachedResponses];
     NSLog(@"webViewDidFinishLoad: %@", [webView.request.URL lastPathComponent]);
 //    
 //    NSString* js =
@@ -496,7 +521,7 @@
         [self downloadMp3File:(NSString*)self.mp3FileArray[0]];
     }else{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [_sysmsg setText:@"mp3FileArray count==0"];
+        [_sysmsg setText:@"MBProgressHUD"];
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
         [self gotoNextVC];
     }
@@ -539,7 +564,8 @@
             // Finish Downloading and Goto Main VC
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             NSLog(urlString);
-            [_sysmsg setText:@"Finish DL"];
+            //[_sysmsg setText:@"Finish DL"];
+            [[DataManager sharedManager] setDownloadcompleted:TRUE];
             [self gotoNextVC];
         }        else        {
             [self downloadMp3File:(NSString*)self.mp3FileArray[0]];
@@ -551,13 +577,13 @@
         if ([self.mp3FileArray count] == 0) {
             // Finish Downloading and Goto Main VC
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            [_sysmsg setText:@"Finish DL (with errors)"];
+            //[_sysmsg setText:@"Finish DL (with errors)"];
             [self gotoNextVC];
         }     else     {
             [self.mp3FileArray removeObjectAtIndex:0];
             if ([self.mp3FileArray count] == 0) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-                [_sysmsg setText:@"Finish DL (after removeObjectIndex)"];
+                //[_sysmsg setText:@"Finish DL (with errors after removeObjectIndex)"];
                 [self gotoNextVC];
                 
             }else{
@@ -576,17 +602,13 @@
     //    return ;
     [[DataManager sharedManager] saveManager];
     
-    NSMutableString *projectURL = [NSMutableString stringWithString:HOME_URL];
-    //            [ projectURL appendString:@"/"];
-    NSLog(self.project_name);
-    [projectURL appendString:@"/"];
-    [projectURL appendString:self.project_name];
-    [projectURL appendString:@"/slider.html"];
+    NSMutableString *fileURL = [NSMutableString stringWithString:[[DataManager sharedManager] project_url]];
+    [fileURL appendString:@"slider.html"];
     if([[DataManager sharedManager] onsite]){
-        [projectURL appendString:@"?onsite=1"];
+        [fileURL appendString:@"?onsite=1"];
     }
-    NSLog(projectURL);
-    NSString *oururl = [NSString stringWithFormat:@"%@",projectURL];
+    NSLog(fileURL);
+    NSString *oururl = [NSString stringWithFormat:@"%@",fileURL];
     NSLog(oururl);
     
     //    NSURL *url = [NSURL URLWithString: @"http://www.google.com"];
@@ -607,40 +629,73 @@
 #pragma mark - Location Manager
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
     NSLog(@"mark 3 location manager called.");
-    if([beacons count]==0){
-        NSLog(@"beacons are 0 but didRange called");
+    if(beacons ==nil){
+        NSLog(@"beacons are nil but didRange called");
     }else{
-        NSLog(@"beacons are NOT 0 and didRange called");
+        NSLog(@"beacons are NOT nil and didRange called");
+        
         
         if([beacons count] == 0) { return; }
-        //NSLog(@"beacons count is not 0");
+        NSLog(@"beacons count is not 0");
         NSLog(@"%d",[beacons count]);
         if([[DataManager sharedManager] beaconID]==nil){
             NSLog(@"and beacon id is null");
         }
         //NSLog(@"%l",[[[DataManager sharedManager] beaconID] count]);
         
-        //CLBeacon *beacon = [ViewController getBeacon:beacons beaconID: [[DataManager sharedManager] beaconID]];
-        
-        //beaconIDと発見されたbeaconを比較して返す（登録なしの場合は””が返る）
-        //NSString *beaconcatched = [ViewController beaconcatcher:beacons beaconID: [[DataManager sharedManager] beaconID]];
-        
-/* underconstruction
-        if(beaconcatched!=@""){
+        CLBeacon *beacon = [ViewController getBeacon:beacons beaconID: [[DataManager sharedManager] beaconID]];
+        if(beacon!=nil){
             
+//         [[DataManager sharedManager] setOnsite:TRUE];
+/*
             if([[DataManager sharedManager] onsite]){
                 [_sysmsg setText:@"setOnsite: onsite=true"];
             } else {
                 [_sysmsg setText:@"setOnsite: onsite=false"];
-            
             }
-            [[DataManager sharedManager] setOnsite:TRUE];
-//            if([DataManager sharedManager].onsite==false){
-//                [self gotoNextVC];
-//            }
-            NSLog(@"mark 5 beacon in the ids found. set on site. ");
-        }
 */
+            if([DataManager sharedManager].onsite == false){
+                [[DataManager sharedManager] setOnsite:TRUE];
+                [_sysmsg setText:@"onsite status has been changed: false->true while downloading process"];
+                if([DataManager sharedManager].downloadcompleted==true){
+                    [self gotoNextVC];
+                    [_sysmsg setText:@"onsite status has been changed: false->true while viewing slider.html"];
+                }
+            } else {
+                NSLog(@"AAA");
+                if([DataManager sharedManager].downloadcompleted==true && [DataManager sharedManager].readytoPlay > 0 ){
+                    [_sysmsg setText:@"ready to play"];
+                     NSString *beaconmajorminor = [NSString stringWithFormat:@"%@%@",[beacon major], [beacon minor]];
+                    NSLog([DataManager sharedManager].project_firstbeacon);
+                    NSLog(beaconmajorminor);
+                    if([[DataManager sharedManager].project_firstbeacon isEqualToString: beaconmajorminor]){
+                        if([DataManager sharedManager].downloadcompleted==true && [DataManager sharedManager].readytoPlay > 4 ){
+                            [_sysmsg setText:@"Play!!!"];
+                            ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
+                            [self.navigationController pushViewController:vc animated:YES];
+                            
+                            
+                            
+                        } else {
+                            [DataManager sharedManager].readytoPlay++;
+                            NSLog(@"readytoplay value:");
+                            NSLog(@"%d",[DataManager sharedManager].readytoPlay);
+                        }
+                    } else {
+                        NSLog(@"(need more value) readytoplay value:");
+                        NSLog(@"%d",[DataManager sharedManager].readytoPlay);
+                    }
+                } else {
+                    NSLog(@"not ready to play");
+                }
+            }
+            //NSLog(@"mark 5 beacon in the ids found. set on site. ");
+            NSString *beaconmajorminor = [NSString stringWithFormat:@"%@%@",[beacon major], [beacon minor]];
+            NSLog(@"beacon's major+minor: ");
+            NSLog(beaconmajorminor);
+        
+        }
+        
     }
     
     

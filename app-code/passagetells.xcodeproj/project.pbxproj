@@ -253,8 +253,8 @@
 				F122836F1A604F6500DBCE61 /* Main.storyboard */,
 				F12283721A604F6500DBCE61 /* Images.xcassets */,
 				F12283741A604F6500DBCE61 /* LaunchScreen.xib */,
-				F12283691A604F6500DBCE61 /* Supporting Files */,
 				F193FF581A6067520092B355 /* hebron-Bridging-Header.h */,
+				F12283691A604F6500DBCE61 /* Supporting Files */,
 				473E0BA01B8E594B00777AB0 /* BeaconListener.swift */,
 			);
 			path = hebron;
