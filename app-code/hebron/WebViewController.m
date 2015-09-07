@@ -403,10 +403,10 @@
             
         }
         return NO;
-    } else if([[request.URL scheme] isEqual:@"safari"]) {
+    } else if([[request.URL scheme] isEqual:@"mozilla"]) {
         
         NSString *filePath= [request.URL absoluteString];
-        NSString *filePatha = [filePath stringByReplacingOccurrencesOfString:@"safari" withString:@"http"];
+        NSString *filePatha = [filePath stringByReplacingOccurrencesOfString:@"mozilla" withString:@"http"];
         NSLog(filePatha);
         NSURL *linkURL = [NSURL URLWithString:filePatha];
         [[UIApplication sharedApplication] openURL:linkURL];
