@@ -7,3 +7,4 @@
 
 #import "WebViewController.h"
 #import "Common.h"
+#import "DataManager.h"

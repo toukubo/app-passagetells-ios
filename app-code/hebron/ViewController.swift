@@ -35,8 +35,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     //Estimote Beacon IDs & positions
 
     //Edinburgh Version 1.1
-    var beaconID = ["1340030201":1, "1340030202":2, "1340030203":3, "1340030204":4, "1340030205":5, "1340030206":6, "1340030207":7, "1340030208":8, "1340030209":9, "1340030210":10, "1340030211":11, "1340030212":12, "1340030213":13, "1340030214":14, "1340030215":15, "1340030216":16, "1340030217":17, "version":110]
+    //var beaconID = ["1340030201":1, "1340030202":2, "1340030203":3, "1340030204":4, "1340030205":5, "1340030206":6, "1340030207":7, "1340030208":8, "1340030209":9, "1340030210":10, "1340030211":11, "1340030212":12, "1340030213":13, "1340030214":14, "1340030215":15, "1340030216":16, "1340030217":17, "version":110]
     
+    var beaconID = DataManager.sharedManager().beaconID as Dictionary
 
     //Edinburgh Version 0
     //var beaconID = ["1340030217":17]
@@ -53,8 +54,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     //var ctrlData = ["0015":"P01010", "0016":"P02040", "0017":"P03100"]
     
     //Edinburgh Version 1.1
-    var ctrlData =  ["0014":"S", "0015":"P01010", "0016":"P02040", "0017":"P03100", "version":"1.1"]
+    //var ctrlData =  ["0014":"S", "0015":"P01010", "0016":"P02040", "0017":"P03100", "version":"1.1"]
     
+    var ctrlData = DataManager.sharedManager().ctrlDatas
 
     var newPOS = 0, cPOS = 0, pPOS = 0
     var SCENE = 0
@@ -98,6 +100,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         
         println("Start!!!")
         
+        println("beaconID:\(beaconID)")
+        println("ctrlData:\(ctrlData)")
+        
+        /*
         let reachability = AMReachability.reachabilityForInternetConnection()
         if reachability.isReachable() {
             var Url:NSURL = NSURL(string:"http://passagetellsproject.net/app/" + DataManager.sharedManager().project_name + "/beaconid.json")!
@@ -108,7 +114,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             
             println ("no internet connection")
         }
-        
+        */
         
 //        ctrlData = DataManager.getCtrlData()
         
@@ -146,13 +152,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
                     case .AuthorizedAlways, .AuthorizedWhenInUse:
                             //Start monitoring
                             println("Monitoring!")
-                            self.status.text = "Playing " + toString(beaconID["version"]!)
+                            //self.status.text = "Playing " + toString(beaconID["version"])
                             self.btnClose.hidden = false;
 
                             for i=0;i<27;i++ { self.audio[i].volume = 0 }
                             self.audio[0].volume = 1
                             self.audio[0].playFileAsync(getPath("0000.mp3"), target: self, selector: "PTDidStartPlay")
-                            SoundFileLoader()
+                            //SoundFileLoader()
                             self.manager.startRangingBeaconsInRegion(self.region)
                     default:
                             //unknown error
@@ -265,7 +271,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
     region  : The region object containing the parameters that were used to locate the beacons
     */
     func locationManager(manager: CLLocationManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
-println("mark 1 ! --------------")
         if(beacons.count == 0) { reset(); return }
 
         var ii = -1, iii = 0
@@ -312,7 +317,7 @@ println("mark 1 ! --------------")
         if beaconID["\(beacon.major)\(beacon.minor)"] == nil {
             newPOS = 0
         } else {
-            newPOS = beaconID["\(beacon.major)\(beacon.minor)"]!
+            newPOS = beaconID["\(beacon.major)\(beacon.minor)"]!.stringValue.toInt()!
         }
         
         if (newPOS != cPOS && newPOS != 0) {
@@ -529,6 +534,7 @@ println("mark 1 ! --------------")
         return buf
     }
 
+/*
     func responseforbeaconid(res: NSURLResponse!, data: NSData!, error: NSError!){
         println(res.URL)
         println("yeah")
@@ -540,6 +546,7 @@ println("mark 1 ! --------------")
             println("no internet connection")
         }
     }
+*/
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

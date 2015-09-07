@@ -364,7 +364,7 @@
             
 
         }else  if([actionsAndParams rangeOfString:@"understood"].location != NSNotFound) {
-             [[DataManager sharedManager] setReadytoPlay:1];
+            [[DataManager sharedManager] setReadytoPlay:1];
             NSLog(@"understood: ");
             NSLog(@"%d",[DataManager sharedManager].readytoPlay);
             NSMutableString *fileURL = [NSMutableString stringWithString:[[DataManager sharedManager] project_url]];
@@ -382,6 +382,24 @@
             
             ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
             [self.navigationController pushViewController:vc animated:YES];
+            
+        }else  if([actionsAndParams rangeOfString:@"home"].location != NSNotFound) {
+            
+            [[NSURLCache sharedURLCache] removeAllCachedResponses];
+            [[DataManager sharedManager] setOnsite:TRUE];
+            [[DataManager sharedManager] setDownloadcompleted:FALSE];
+            [[DataManager sharedManager] setReadytoPlay:0];
+            
+            NSLog(@"home: ");
+            NSMutableString *fileURL = [NSMutableString stringWithString:HOME_URL];
+            [fileURL appendString:@"projects.html"];
+            NSString *oururl = [NSString stringWithString:fileURL];
+            NSLog(oururl);
+            NSURL* url = [NSURL URLWithString: oururl];
+            
+            NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30];
+            
+            [webView loadRequest:request];
             
         }
         return NO;
@@ -522,7 +540,7 @@
     }else{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [_sysmsg setText:@"MBProgressHUD"];
-        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:2.0]];
+        [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:3.0]];
         [self gotoNextVC];
     }
 }
@@ -531,7 +549,7 @@
     
 //    int thenumber =1*100+mediaid;
 //    NSString *filename = [ NSString stringWithFormat:@"%04d%@", thenumber,@".mp3"];
-    NSString *urlString = [NSString stringWithFormat:@"%@%@",BASE_URL, filename];
+    NSString *urlString = [NSString stringWithFormat:@"%@%@", self.project_url, filename];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
     AFHTTPRequestOperation *operation = [[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -671,10 +689,10 @@
                     if([[DataManager sharedManager].project_firstbeacon isEqualToString: beaconmajorminor]){
                         if([DataManager sharedManager].downloadcompleted==true && [DataManager sharedManager].readytoPlay > 4 ){
                             [_sysmsg setText:@"Play!!!"];
-                            /*
+                            
                             [self.locationManager stopRangingBeaconsInRegion:region];
                             [self.locationManager stopMonitoringForRegion:region];
-                            */
+                            
                             ViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"MainViewController"];
                             [self.navigationController pushViewController:vc animated:YES];        
                             
