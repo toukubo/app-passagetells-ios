@@ -500,7 +500,8 @@
 
     self.mp3FileArray = [[NSMutableArray alloc] init];
     if ([savedFiles count] == 36) {
-        [_sysmsg setText:@"count==36"];
+        //[_sysmsg setText:@"count==36"];
+        [[DataManager sharedManager] setDownloadcompleted:TRUE];
         [self gotoNextVC];
         return;
     }    else if ([savedFiles count] == 0) {
@@ -537,8 +538,9 @@
         [self downloadMp3File:(NSString*)self.mp3FileArray[0]];
     }else{
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-        [_sysmsg setText:@"MBProgressHUD"];
+        //[_sysmsg setText:@"MBProgressHUD"];
         [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:3.0]];
+        [[DataManager sharedManager] setDownloadcompleted:TRUE];
         [self gotoNextVC];
     }
 }
@@ -594,12 +596,14 @@
             // Finish Downloading and Goto Main VC
             [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
             //[_sysmsg setText:@"Finish DL (with errors)"];
+            [[DataManager sharedManager] setDownloadcompleted:TRUE];
             [self gotoNextVC];
         }     else     {
             [self.mp3FileArray removeObjectAtIndex:0];
             if ([self.mp3FileArray count] == 0) {
                 [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                 //[_sysmsg setText:@"Finish DL (with errors after removeObjectIndex)"];
+                [[DataManager sharedManager] setDownloadcompleted:TRUE];
                 [self gotoNextVC];
                 
             }else{
@@ -672,20 +676,20 @@
 */
             if([DataManager sharedManager].onsite == false){
                 [[DataManager sharedManager] setOnsite:TRUE];
-                [_sysmsg setText:@"onsite status has been changed: false->true while downloading process"];
+                //[_sysmsg setText:@"onsite status has been changed: false->true while downloading process"];
                 if([DataManager sharedManager].downloadcompleted==true){
                     [self gotoNextVC];
-                    [_sysmsg setText:@"onsite status has been changed: false->true while viewing slider.html"];
+                    //[_sysmsg setText:@"onsite status has been changed: false->true while viewing slider.html"];
                 }
             } else {
                 if([DataManager sharedManager].downloadcompleted==true && [DataManager sharedManager].readytoPlay > 0 ){
-                    [_sysmsg setText:@"ready to play"];
+                    //[_sysmsg setText:@"ready to play"];
                      NSString *beaconmajorminor = [NSString stringWithFormat:@"%@%@",[beacon major], [beacon minor]];
                     NSLog([DataManager sharedManager].project_firstbeacon);
                     NSLog(beaconmajorminor);
                     if([[DataManager sharedManager].project_firstbeacon isEqualToString: beaconmajorminor]){
                         if([DataManager sharedManager].downloadcompleted==true && [DataManager sharedManager].readytoPlay > 4 ){
-                            [_sysmsg setText:@"Play!!!"];
+                            //[_sysmsg setText:@"Play!!!"];
                             
                             [self.locationManager stopRangingBeaconsInRegion:region];
                             [self.locationManager stopMonitoringForRegion:region];

@@ -393,7 +393,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         PTplayCtrler.removeAtIndex(0); PTplayTrack.removeAtIndex(0); PTplayTask -= 1
     }
     func PTstop(){
-        //D/ self.colour.text = "stop"//self.audio[PTstopCtrler[0]].stop();print("c\(PTstopCtrler[0]):STOP\n")
+        //D/ self.colour.text = "stop"
+        self.audio[PTstopCtrler[0]].stop();print("c\(PTstopCtrler[0]):STOP\n")
         PTstopCtrler.removeAtIndex(0); PTstopTask -= 1
     }
     func PTfadein(){
@@ -559,15 +560,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
  
     @IBAction func closeButtonTouched(sender: AnyObject) {
         
-        //[[NSURLCache sharedURLCache] removeAllCachedResponses];
+        for i=0;i<27;i++ { self.audio[i].clear() }
         
-        self.audio[PTplayCtrler[0]].stop()
-        self.audio[PTplayCtrler[1]].stop()
-    
-        
-        DataManager.sharedManager().onsite = true
-        DataManager.sharedManager().downloadcompleted = true
+        DataManager.sharedManager().onsite = false
+        DataManager.sharedManager().downloadcompleted = false
         DataManager.sharedManager().readytoPlay = 0
+        NSURLCache.sharedURLCache().removeAllCachedResponses()
 
         println("hogehoge")
         var WebVC : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("WebViewController")
