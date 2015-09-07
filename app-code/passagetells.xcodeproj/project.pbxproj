@@ -39,6 +39,7 @@
 		F12283731A604F6500DBCE61 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F12283721A604F6500DBCE61 /* Images.xcassets */; };
 		F12283761A604F6500DBCE61 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = F12283741A604F6500DBCE61 /* LaunchScreen.xib */; };
 		F193FF5B1A6067520092B355 /* Objc.m in Sources */ = {isa = PBXBuildFile; fileRef = F193FF5A1A6067520092B355 /* Objc.m */; };
+		F1AE65E21B9DD86100C990BB /* closeicon.png in Resources */ = {isa = PBXBuildFile; fileRef = F1AE65E11B9DD86100C990BB /* closeicon.png */; };
 		F1EDC6DB1B6601AE002300CA /* AMReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1EDC6DA1B6601AE002300CA /* AMReachability.swift */; };
 /* End PBXBuildFile section */
 
@@ -105,6 +106,7 @@
 		F193FF581A6067520092B355 /* hebron-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hebron-Bridging-Header.h"; sourceTree = "<group>"; };
 		F193FF591A6067520092B355 /* Objc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Objc.h; sourceTree = "<group>"; };
 		F193FF5A1A6067520092B355 /* Objc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Objc.m; sourceTree = "<group>"; };
+		F1AE65E11B9DD86100C990BB /* closeicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = closeicon.png; sourceTree = "<group>"; };
 		F1EDC6DA1B6601AE002300CA /* AMReachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AMReachability.swift; sourceTree = SOURCE_ROOT; };
 		FF3A20012417BB6AAF40A331 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -265,6 +267,7 @@
 			children = (
 				BAE7AC7F1B8D84B700A2B413 /* Mp3 */,
 				476C2C191B8CEB5F00038071 /* icon400.png */,
+				F1AE65E11B9DD86100C990BB /* closeicon.png */,
 				F1EDC6DA1B6601AE002300CA /* AMReachability.swift */,
 				F122836A1A604F6500DBCE61 /* Info.plist */,
 			);
@@ -339,6 +342,7 @@
 				F12283711A604F6500DBCE61 /* Main.storyboard in Resources */,
 				47D7D4BE1B97274A0048C0E9 /* closeicon.jpeg in Resources */,
 				F12283761A604F6500DBCE61 /* LaunchScreen.xib in Resources */,
+				F1AE65E21B9DD86100C990BB /* closeicon.png in Resources */,
 				F12283731A604F6500DBCE61 /* Images.xcassets in Resources */,
 				476C2C1A1B8CEB5F00038071 /* icon400.png in Resources */,
 			);

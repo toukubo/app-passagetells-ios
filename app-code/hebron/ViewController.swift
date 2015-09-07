@@ -246,7 +246,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             return nil
         }
         var beacon = beacons[ii] as! CLBeacon
-        println("beacon detected: \(beacon)")
+        //println("beacon detected: \(beacon)")
         return beacon;
         
     }
@@ -469,6 +469,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
        var filepath = mp3file.filePath as String
        return filepath
     }
+/*
     func SoundFileLoader () {
         for ( i = 1; i < 4; i++ ) {
             var t = NSString(format: "%04d%@", SCENE*100+i,".mp3")
@@ -491,6 +492,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             }
         }
     }
+*/
     func PTDidLoad(){
         print("loading process done,")
     }
@@ -557,6 +559,16 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
  
     @IBAction func closeButtonTouched(sender: AnyObject) {
         
+        //[[NSURLCache sharedURLCache] removeAllCachedResponses];
+        
+        self.audio[PTplayCtrler[0]].stop()
+        self.audio[PTplayCtrler[1]].stop()
+    
+        
+        DataManager.sharedManager().onsite = true
+        DataManager.sharedManager().downloadcompleted = true
+        DataManager.sharedManager().readytoPlay = 0
+
         println("hogehoge")
         var WebVC : AnyObject! = self.storyboard?.instantiateViewControllerWithIdentifier("WebViewController")
         self.navigationController!.pushViewController(WebVC as! UIViewController,animated: true)

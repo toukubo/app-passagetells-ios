@@ -39,7 +39,7 @@
     
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
+    //NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:@"B9407F30-F5F8-466E-AFF9-25556B57FE6D"];
     
     self.navigationController.navigationBarHidden = YES;
     
@@ -240,9 +240,7 @@
             
             // Get JSON files
             // BeaconID.JSON
-            [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            
-            
+            //[MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
             // CtrlData.JSON
             [DataManager sharedManager].ctrlDatas = [[NSDictionary alloc] init];
@@ -313,7 +311,7 @@
             }];
 
             
-            ///////////// downloading beacons
+            ///////////// downloading beacons (needed?)
             if([[[DataManager sharedManager] beaconID] count]==0){
                 
                 [[DataManager sharedManager] setBeaconID:[BeaconListner parseIntoDictionary]];
@@ -680,7 +678,6 @@
                     [_sysmsg setText:@"onsite status has been changed: false->true while viewing slider.html"];
                 }
             } else {
-                NSLog(@"AAA");
                 if([DataManager sharedManager].downloadcompleted==true && [DataManager sharedManager].readytoPlay > 0 ){
                     [_sysmsg setText:@"ready to play"];
                      NSString *beaconmajorminor = [NSString stringWithFormat:@"%@%@",[beacon major], [beacon minor]];
