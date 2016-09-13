@@ -45,7 +45,8 @@
     
     // show loading indicator
     mbLoad = [[MBProgressHUD alloc] initWithView:self.view];
-    mbLoad.labelText = @"Loading...";
+    [mbLoad setLabelText:@"Loading..."];
+    //mbLoad.labelText = @"Loading...";
     [self.view addSubview:mbLoad];
     [mbLoad setDelegate:self];
     [mbLoad show:YES];
@@ -244,6 +245,7 @@
             
             // CtrlData.JSON
             [DataManager sharedManager].ctrlDatas = [[NSDictionary alloc] init];
+            [mbLoad setLabelText:@"CtrlData"];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             
             NSLog(@"location of ctrldata: ");
@@ -332,8 +334,8 @@
             
             // mp3s
             [[[DataManager sharedManager] mp3FileNames] removeAllObjects];
+            //MBProgressHUD *mbLoad = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
             [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-            
             NSString *mp3sjsonurl = [NSString stringWithFormat:@"%@%@/",HOME_URL,[[DataManager sharedManager] project_name]];
             NSLog(mp3sjsonurl);
             [[AFNetManager sharedManager] sendGETRequestTo:mp3sjsonurl path:@"mp3s.json" params:@{} success:^(id successBlock) {
@@ -348,6 +350,7 @@
 //                    NSLog(key);
 //                    [[[DataManager sharedManager] mp3FileNames] addObject:key];
 //                }
+                mbLoad.labelText = @"Downloading...";
                 [self downloadMp3s:array];
                 
                 
@@ -533,7 +536,8 @@
         }
     }
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    mbLoad = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    mbLoad.labelText = @"DOWNLOADING...";
     if([self.mp3FileArray count] != 0){
         [self downloadMp3File:(NSString*)self.mp3FileArray[0]];
     }else{
@@ -557,7 +561,13 @@
     NSString *fileName = [urlString lastPathComponent];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    //NSMutableString *path = [paths objectAtIndex:0];
+    //[path appendString:self.project_name];
+    //[path appendString:@"/"];
+    //[path appendString:fileName];
+    
     NSString *path = [[paths objectAtIndex:0] stringByAppendingPathComponent:fileName];
+    
     operation.outputStream = [NSOutputStream outputStreamToFileAtPath:path append:NO];
     
     [operation setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {

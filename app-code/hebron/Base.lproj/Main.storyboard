@@ -34,7 +34,9 @@
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xeL-Uo-N1T">
                                 <rect key="frame" x="16" y="265" width="288" height="137"/>
-                                <string key="text">Do not close the app while listening. Push x only if you want to restart the app from the begining.</string>
+                                <string key="text">Do not close the app while listening. 
+Push x only if you want to restart 
+the app from the begining.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -81,12 +83,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TZX-I2-E6t">
+                            <webView contentMode="scaleToFill" misplaced="YES" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TZX-I2-E6t">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="TZX-I2-E6t" firstAttribute="leading" secondItem="ify-09-ajB" secondAttribute="leading" id="CfC-r8-n0Z"/>
+                            <constraint firstAttribute="trailing" secondItem="TZX-I2-E6t" secondAttribute="trailing" id="HlN-lF-fdr"/>
+                            <constraint firstAttribute="bottom" secondItem="TZX-I2-E6t" secondAttribute="bottom" id="R01-2E-K7q"/>
+                            <constraint firstItem="TZX-I2-E6t" firstAttribute="top" secondItem="ify-09-ajB" secondAttribute="top" constant="20" id="Ubh-Tv-IOp"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="pkE-r7-iTE"/>
                     <connections>

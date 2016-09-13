@@ -302,6 +302,8 @@
 		F122835E1A604F6500DBCE61 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0730;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = "Daisuke Nakazawa";
 				TargetAttributes = {

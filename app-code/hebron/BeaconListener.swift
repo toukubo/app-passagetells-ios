@@ -101,28 +101,28 @@ import AVFoundation
     
     static func parseIntoDictionary() -> NSDictionary?{
         
-        var Url:NSURL = NSURL(string:"http://passagetellsproject.net/app/" + DataManager.sharedManager().project_name + "/beaconid.json")!
+        let Url:NSURL = NSURL(string:"http://passagetellsproject.net/app/" + DataManager.sharedManager().project_name + "/beaconid.json")!
         var resp : NSURLResponse ;
         var err : NSError
         // エラーを格納するオブジェクト
         
-        var Request:NSURLRequest  = NSURLRequest(URL: Url)
-        println(Url)
-        var data = NSURLConnection.sendSynchronousRequest(Request, returningResponse: nil, error: nil)!
-        println(data)
-        println("oh and null")
-        var jsonbeaconid:NSDictionary! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: nil)! as? NSDictionary //get a data as ictionary
+        let Request:NSURLRequest  = NSURLRequest(URL: Url)
+        print(Url)
+        let data = try! NSURLConnection.sendSynchronousRequest(Request, returningResponse: nil)
+        print(data)
+        print("oh and null")
+        let jsonbeaconid:NSDictionary! = (try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)) as? NSDictionary //get a data as ictionary
         if (jsonbeaconid != nil) {
-            println(jsonbeaconid)
+            print(jsonbeaconid)
             return jsonbeaconid
         } else {
-            println("no internet connection")
+            print("no internet connection")
         }
         return nil
     }
     override init() {
         
-        println("Start!!!")
+        print("Start!!!")
         
         let reachability = AMReachability.reachabilityForInternetConnection()
         if reachability.isReachable() {
@@ -132,26 +132,26 @@ import AVFoundation
             // エラーを格納するオブジェクト
 
             var Request:NSURLRequest  = NSURLRequest(URL: Url)
-            println(Url)
-            var data = NSURLConnection.sendSynchronousRequest(Request, returningResponse: nil, error: nil)!
-            println(data)
-            println("oh and null")
-            var jsonbeaconid:NSDictionary! = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: nil)! as? NSDictionary //get a data as ictionary
+            print(Url)
+            var data = try! NSURLConnection.sendSynchronousRequest(Request, returningResponse: nil)
+            print(data)
+            print("oh and null")
+            var jsonbeaconid:NSDictionary! = (try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)) as? NSDictionary //get a data as ictionary
             if (jsonbeaconid != nil) {
                 beaconID = jsonbeaconid as! Dictionary
             } else {
-                println("no internet connection")
+                print("no internet connection")
             }
 
             
         } else {
             
-            println ("no internet connection")
+            print ("no internet connection")
         }
         
         //create CLBeaconRegion
-        println(proximityUUID)
-        region = CLBeaconRegion(proximityUUID:proximityUUID,identifier:"EstimoteRegion")!
+        print(proximityUUID)
+        region = CLBeaconRegion(proximityUUID:proximityUUID!,identifier:"EstimoteRegion")
         
 
         
@@ -171,9 +171,13 @@ import AVFoundation
         case .NotDetermined:
             self.status.text = "Restart the app"
             //Asking permission
-            if(UIDevice.currentDevice().systemVersion.substringToIndex(advance(UIDevice.currentDevice().systemVersion.startIndex,1)).toInt() >= 8){
+            if(Int(UIDevice.currentDevice().systemVersion.substringToIndex(UIDevice.currentDevice().systemVersion.startIndex.advancedBy(1))) >= 8){
                 //iOS8 and later: call a function to request authorization
-                self.manager.requestWhenInUseAuthorization()
+                if #available(iOS 8.0, *) {
+                    self.manager.requestWhenInUseAuthorization()
+                } else {
+                    // Fallback on earlier versions
+                }
             }else{
                 self.manager.startRangingBeaconsInRegion(self.region)
             }
@@ -182,11 +186,11 @@ import AVFoundation
             alert.show()
         case .AuthorizedAlways, .AuthorizedWhenInUse:
             //Start monitoring
-            println("Monitoring")
+            print("Monitoring")
             self.manager.startRangingBeaconsInRegion(self.region)
         default:
             //unknown error
-            println("Unknown Error")
+            print("Unknown Error")
             self.status.text = "Unknown Error"
         }
     }
@@ -198,10 +202,10 @@ import AVFoundation
     /*
     - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
     */
-    func locationManager(manager: CLLocationManager!, didStartMonitoringForRegion region: CLRegion!) {
+    func locationManager(manager: CLLocationManager, didStartMonitoringForRegion region: CLRegion) {
         manager.requestStateForRegion(region)
         self.status.text = "Scanning"
-        println("mark 2 ------")
+        print("mark 2 ------")
 
     }
     
@@ -209,7 +213,7 @@ import AVFoundation
     - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
     Parameters
     */
-    func locationManager(manager: CLLocationManager!, didDetermineState state: CLRegionState, forRegion inRegion: CLRegion!) {
+    func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion inRegion: CLRegion) {
         if (state == .Inside) {
             //monitoring if it's within the area
             manager.startRangingBeaconsInRegion(region)
@@ -219,10 +223,10 @@ import AVFoundation
     /*
     - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
     */
-    func locationManager(manager: CLLocationManager!, monitoringDidFailForRegion region: CLRegion!, withError error: NSError!) {
-        println("mark 2 ------")
+    func locationManager(manager: CLLocationManager, monitoringDidFailForRegion region: CLRegion?, withError error: NSError) {
+        print("mark 2 ------")
 
-        println("monitoringDidFailForRegion \(error)")
+        print("monitoringDidFailForRegion \(error)")
         self.status.text = "Error: \(error)"
     }
     
@@ -233,17 +237,17 @@ import AVFoundation
     error   : The error object containing the reason the location or heading could not be retrieved.
     */
     //connection failed
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        println("didFailWithError \(error)")
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("didFailWithError \(error)")
         self.status.text = "Error: \(error)"
     }
     
-    func locationManager(manager: CLLocationManager!, didEnterRegion region: CLRegion!) {
+    func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
         manager.startRangingBeaconsInRegion(region as! CLBeaconRegion)
         self.status.text = "Possible Match"
     }
     
-    func locationManager(manager: CLLocationManager!, didExitRegion region: CLRegion!) {
+    func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
         manager.stopRangingBeaconsInRegion(region as! CLBeaconRegion)
         reset()
         self.status.text = "Reset"
@@ -257,9 +261,9 @@ import AVFoundation
     beacons : An array of CLBeacon objects representing the beacons currently in range. You can use the information in these objects to determine the range of each beacon and its identifying information.
     region  : The region object containing the parameters that were used to locate the beacons
     */
-    func locationManager(manager: CLLocationManager!, didRangeBeacons beacons: [AnyObject]!, inRegion region: CLBeaconRegion!) {
+    func locationManager(manager: CLLocationManager, didRangeBeacons beacons: [CLBeacon], inRegion region: CLBeaconRegion) {
         
-        println("mark 2 ------")
+        print("mark 2 ------")
         if(beacons.count == 0) { reset(); return }
         
         var ii = -1, iii = 0
@@ -267,7 +271,7 @@ import AVFoundation
         var tt = "minor: accuracy: rssi: proximity\n"
         //use the first one except unknown
         for i = 0; i < beacons.count; i++ {
-            var beacon = beacons[i] as! CLBeacon
+            let beacon = beacons[i] 
             var ttt = "\(beacon.minor):\(beacon.accuracy):\(beacon.rssi):"
             if (beacon.proximity == CLProximity.Unknown) {
                 ttt += "Unknown\n"
@@ -291,7 +295,7 @@ import AVFoundation
             //D/ self.colour.text = "Unknown proximity / beacons"
             return
         }
-        var beacon = beacons[ii] as! CLBeacon
+        let beacon = beacons[ii] 
         
         
         
@@ -314,7 +318,7 @@ import AVFoundation
             newTRACK = NSString(format: "%04d", SCENE*100+newPOS) as String
             PTctrlGet()
             //wait once before scene change
-            if ctrlrsv == 0 && (find(ctrl, "N") != nil || find(ctrl, "P") != nil || find(ctrl, "S") != nil || find(ctrl, "V") != nil) {
+            if ctrlrsv == 0 && (ctrl.characters.indexOf("N") != nil || ctrl.characters.indexOf("P") != nil || ctrl.characters.indexOf("S") != nil || ctrl.characters.indexOf("V") != nil) {
                 ctrlrsv = 1
                 //D/ self.colour.text = "\(cTRACK) wait for \(SCENE+1)"; print("WAIT\(ctrlrsv),")
                 return
@@ -326,7 +330,7 @@ import AVFoundation
             PTctrlP() //should be in the same func
             PTctrlS() //should be in the same func
             PTctrlV() //should be in the same func
-            if find(ctrl, "E") != nil {
+            if ctrl.characters.indexOf("E") != nil {
                 //D/ self.colour.text = "\(cTRACK) stay away from \(newPOS)"; print("E,")
                 pPOS = cPOS
                 cPOS = newPOS
@@ -353,11 +357,11 @@ import AVFoundation
         } else {
             ctrl = ctrlData[newTRACK]!
         }
-        print("CTRL:\(newTRACK)\(ctrl)," )
+        print("CTRL:\(newTRACK)\(ctrl),", terminator: "" )
     }
     func PTctrlN(){
         //if ctrl.rangeOfString("N") != nil {
-        if find(ctrl, "N") != nil {
+        if ctrl.characters.indexOf("N") != nil {
             //if ctrlNrsv != 0 {
             ++SCENE
             PTresume = [0:0, 1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12:0, 13:0, 14:0, 15:0, 16:0, 17:0, 18:0, 19:0, 20:0, 21:0, 22:0, 23:0, 24:0, 25:0]
@@ -366,17 +370,17 @@ import AVFoundation
     }
     func PTplay(){
         PTresume[pPOS] = self.audio[pPOS].currentTime - 2
-        print("TASK:\(PTfadeoutTask)\(PTplayTask)\(PTfadeinTask)\(PTfinalTask)\(PTstopTask),")
+        print("TASK:\(PTfadeoutTask)\(PTplayTask)\(PTfadeinTask)\(PTfinalTask)\(PTstopTask),", terminator: "")
         PTfadeoutCtrler += [pPOS]; PTfadeoutTask += 1
-        self.audio[pPOS].fadeTo(0.2, duration: 0.8, target: self, selector: "PTplayNew");print("c\(pPOS):FADE0.2,")
+        self.audio[pPOS].fadeTo(0.2, duration: 0.8, target: self, selector: "PTplayNew");print("c\(pPOS):FADE0.2,", terminator: "")
         PTplayCtrler += [newPOS]; PTplayTrack += [newTRACK]; PTplayTask += 1
     }
     func PTplayNew(){
-        self.audio[PTfadeoutCtrler[0]].fadeTo(0, duration: 1, target: self, selector: "PTstop");print("c\(PTfadeoutCtrler[0]):FADE0,")
+        self.audio[PTfadeoutCtrler[0]].fadeTo(0, duration: 1, target: self, selector: "PTstop");print("c\(PTfadeoutCtrler[0]):FADE0,", terminator: "")
         PTstopCtrler += [PTfadeoutCtrler[0]]; PTstopTask += 1
         PTfadeoutCtrler.removeAtIndex(0); PTfadeoutTask -= 1
         self.audio[PTplayCtrler[0]].stop()
-        self.audio[PTplayCtrler[0]].playFileAsync("\(PTplayTrack[0]).mp3", target: self, selector: "PTfadein");print("n\(PTplayTrack[0]):PLAY,")
+        self.audio[PTplayCtrler[0]].playFileAsync("\(PTplayTrack[0]).mp3", target: self, selector: "PTfadein");print("n\(PTplayTrack[0]):PLAY,", terminator: "")
         PTfadeinCtrler += [PTplayCtrler[0]]; PTfadeinTrack += [PTplayTrack[0]]; PTfadeinTask += 1
         PTplayCtrler.removeAtIndex(0); PTplayTrack.removeAtIndex(0); PTplayTask -= 1
     }
@@ -386,83 +390,83 @@ import AVFoundation
     }
     func PTfadein(){
         if PTresume[PTfadeinCtrler[0]] > 2 { self.audio[PTfadeinCtrler[0]].currentTime = PTresume[PTfadeinCtrler[0]]! }
-        self.audio[PTfadeinCtrler[0]].fadeTo(1, duration: 0.8, target: self, selector: "PTDidPlay");print("n\(PTfadeinCtrler[0]):FADE1,")
+        self.audio[PTfadeinCtrler[0]].fadeTo(1, duration: 0.8, target: self, selector: "PTDidPlay");print("n\(PTfadeinCtrler[0]):FADE1,", terminator: "")
         PTfinalTrack += [PTfadeinTrack[0]]; PTfinalTask += 1
         PTfadeinCtrler.removeAtIndex(0); PTfadeinTrack.removeAtIndex(0); PTfadeinTask -= 1
     }
     func PTDidPlay(){
-        print("Play:\(PTfinalTrack[0]).mp3,")
+        print("Play:\(PTfinalTrack[0]).mp3,", terminator: "")
         PTfinalTrack.removeAtIndex(0); PTfinalTask -= 1
     }
     
     func PTctrlP(){
-        if find(ctrl,"P") != nil {
-            var str = ctrl as NSString
-            var loc = str.rangeOfString("P").location
+        if ctrl.characters.indexOf("P") != nil {
+            let str = ctrl as NSString
+            let loc = str.rangeOfString("P").location
             newBGTRACK = mid(str as String,start: loc+2,length: 2)
-            volume = Float(mid(str as String,start: loc+4,length: 3).toInt()!) / 100;print("***\(volume)*")
+            volume = Float(Int(mid(str as String,start: loc+4,length: 3))!) / 100;print("***\(volume)*", terminator: "")
             BGresume[cBGTRACK] = self.audio[cBGplayer].currentTime - 2
             if newBGTRACK != cBGTRACK {
-                self.audio[cBGplayer].fadeTo(0.2, duration: 0.8, target: self, selector: "BGplayNew");print("BG\(cBGTRACK):FADE0.2,")
+                self.audio[cBGplayer].fadeTo(0.2, duration: 0.8, target: self, selector: "BGplayNew");print("BG\(cBGTRACK):FADE0.2,", terminator: "")
             } else {
-                self.audio[cBGplayer].fadeTo(volume, duration: 0.8, target: self, selector: "BGDidFade");print("BG\(cBGTRACK):NO-PLAY-FADE\(volume),")
+                self.audio[cBGplayer].fadeTo(volume, duration: 0.8, target: self, selector: "BGDidFade");print("BG\(cBGTRACK):NO-PLAY-FADE\(volume),", terminator: "")
             }
         }
     }
     func BGplayNew(){
-        self.audio[cBGplayer].fadeTo(0, duration: 1, target: self, selector: "BGstop");print("BG\(cBGTRACK):FADE0,")
+        self.audio[cBGplayer].fadeTo(0, duration: 1, target: self, selector: "BGstop");print("BG\(cBGTRACK):FADE0,", terminator: "")
         self.audio[newBGplayer].stop()
-        self.audio[newBGplayer].playFileAsync("bg\(newBGTRACK).mp3", target: self, selector: "BGfadein");print("BG\(newBGTRACK):PLAY,")
+        self.audio[newBGplayer].playFileAsync("bg\(newBGTRACK).mp3", target: self, selector: "BGfadein");print("BG\(newBGTRACK):PLAY,", terminator: "")
     }
     func BGstop(){
-        self.audio[cBGplayer].stop();print("BG\(cBGTRACK):STOP#")
+        self.audio[cBGplayer].stop();print("BG\(cBGTRACK):STOP#", terminator: "")
         if cBGplayer == 27 { cBGplayer = 26; newBGplayer = 27 }
         else { cBGplayer = 27; newBGplayer = 26 }
         cBGTRACK = newBGTRACK
     }
     func BGfadein(){
         if BGresume[newBGTRACK] > 2 { self.audio[newBGplayer].currentTime = BGresume[newBGTRACK]! }
-        self.audio[newBGplayer].fadeTo(volume, duration: 0.8, target: self, selector: "BGDidPlay");print("BG\(newBGTRACK):FADE1,")
+        self.audio[newBGplayer].fadeTo(volume, duration: 0.8, target: self, selector: "BGDidPlay");print("BG\(newBGTRACK):FADE1,", terminator: "")
     }
     func BGDidPlay(){
-        print("Play:bg\(newBGTRACK).mp3,")
+        print("Play:bg\(newBGTRACK).mp3,", terminator: "")
     }
     func PTctrlS(){
-        if find(ctrl,"S") != nil {
+        if ctrl.characters.indexOf("S") != nil {
             BGresume[cBGTRACK] = self.audio[cBGplayer].currentTime - 2
-            self.audio[cBGplayer].fadeTo(0, duration: 5, target: self, selector: "BGDidStop");print("BG\(cBGTRACK):FADE0,")
+            self.audio[cBGplayer].fadeTo(0, duration: 5, target: self, selector: "BGDidStop");print("BG\(cBGTRACK):FADE0,", terminator: "")
         }
     }
     func BGDidStop(){
-        print("STOP:bg\(cBGTRACK).mp3,")
+        print("STOP:bg\(cBGTRACK).mp3,", terminator: "")
     }
     func PTctrlV(){
-        if find(ctrl,"V") != nil {
-            var str = ctrl as NSString
-            var loc = str.rangeOfString("V").location
-            volume = Float(mid(str as String,start: loc+2,length: 3).toInt()!) / 100
+        if ctrl.characters.indexOf("V") != nil {
+            let str = ctrl as NSString
+            let loc = str.rangeOfString("V").location
+            volume = Float(Int(mid(str as String,start: loc+2,length: 3))!) / 100
             if volume > 1 { volume = 1 }
-            self.audio[cBGplayer].fadeTo(volume, duration: 1, target: self, selector: "BGDidFade");print("BG\(newBGTRACK):V\(volume),")
+            self.audio[cBGplayer].fadeTo(volume, duration: 1, target: self, selector: "BGDidFade");print("BG\(newBGTRACK):V\(volume),", terminator: "")
         }
     }
     func BGDidFade(){
-        if find(ctrl,"V") != nil {
-            print("Fade:bg\(newBGTRACK).mp3,")
+        if ctrl.characters.indexOf("V") != nil {
+            print("Fade:bg\(newBGTRACK).mp3,", terminator: "")
         }
     }
     func SoundFileLoader () {
-        for ( i = 1; i < 4; i++ ) {
-            var t = NSString(format: "%04d", SCENE*100+i)
+        for ( i = 1; i < 4; i += 1 ) {
+            let t = NSString(format: "%04d", SCENE*100+i)
             self.audio[i].preloadFileAsync("\(t).mp3", target: self, selector: "PTDidLoad")
-            print("\(t).mp3:loaded,")
+            print("\(t).mp3:loaded,", terminator: "")
         }
     }
     func PTDidLoad(){
-        print("loading process done,")
+        print("loading process done,", terminator: "")
     }
     
     func PTDidStartPlay(){
-        print("Let's play!!!!!\n")
+        print("Let's play!!!!!\n", terminator: "")
     }
     
     func reset(){
@@ -476,7 +480,7 @@ import AVFoundation
     }
     
     func mid(str : String, start : Int, length : Int) -> String {
-        var len: Int = count(str)
+        let len: Int = str.characters.count
         var buf: String = ""
         var i: Int = 0
         var j: Int = 0
@@ -486,12 +490,12 @@ import AVFoundation
             if length <= 0 {
                 buf = ""
             } else {
-                for char: Character in str {
-                    i++
+                for char: Character in str.characters {
+                    i += 1
                     if i >= start {
                         if j < length {
                             buf = buf + String(char)
-                            j++
+                            j += 1
                         }
                     }
                 }
@@ -501,8 +505,8 @@ import AVFoundation
     }
     
     func responseforbeaconid(res: NSURLResponse!, data: NSData!, error: NSError!){
-        println(res.URL)
-        println("yeah")
+        print(res.URL)
+        print("yeah")
         
     }
     
