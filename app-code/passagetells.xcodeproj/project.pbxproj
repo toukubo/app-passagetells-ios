@@ -132,12 +132,12 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		BAE7AC7F1B8D84B700A2B413 /* Mp3 */ = {
+		BAE7AC7F1B8D84B700A2B413 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
 				47D7D4BD1B97274A0048C0E9 /* closeicon.jpeg */,
 			);
-			name = Mp3;
+			name = sounds;
 			sourceTree = "<group>";
 		};
 		BAE7ACAC1B8D84EC00A2B413 /* MBProgressHUD */ = {
@@ -265,7 +265,7 @@
 		F12283691A604F6500DBCE61 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				BAE7AC7F1B8D84B700A2B413 /* Mp3 */,
+				BAE7AC7F1B8D84B700A2B413 /* sounds */,
 				476C2C191B8CEB5F00038071 /* icon400.png */,
 				F1AE65E11B9DD86100C990BB /* closeicon.png */,
 				F1EDC6DA1B6601AE002300CA /* AMReachability.swift */,
