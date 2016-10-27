@@ -103,7 +103,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         print("beaconID:\(beaconID)")
         print("ctrlData:\(ctrlData)")
         
-        /*
+/* temporlly suspended due to avoid errors
+         
         let reachability = AMReachability.reachabilityForInternetConnection()
         if reachability.isReachable() {
             var Url:NSURL = NSURL(string:"http://passagetellsproject.net/app/" + DataManager.sharedManager().project_name + "/beaconid.json")!
@@ -112,11 +113,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
             NSURLConnection.sendAsynchronousRequest(Request, queue: NSOperationQueue.mainQueue(),completionHandler: responseforbeaconid)
         } else {
             
-            println ("no internet connection")
+            print ("no internet connection")
         }
-        */
+*/
         
-//        ctrlData = DataManager.getCtrlData()
+//      ctrlData = DataManager.getCtrlData()
         
         //create CLBeaconRegion
         region = CLBeaconRegion(proximityUUID:proximityUUID!,identifier:"EstimoteRegion")
@@ -541,16 +542,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate, CBPeripheralD
         return buf
     }
 
-/*
+/* temporlly suspended due to avoid errors
     func responseforbeaconid(res: NSURLResponse!, data: NSData!, error: NSError!){
-        println(res.URL)
-        println("yeah")
-
+        print(res.URL)
+        print("yeah")
         var jsonbeaconid:NSDictionary! = NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments, error: nil) as? NSDictionary //get a data as ictionary
         if (jsonbeaconid != nil) {
             beaconID = jsonbeaconid as! Dictionary
         } else {
-            println("no internet connection")
+            print("no internet connection")
         }
     }
 */

@@ -111,7 +111,7 @@ import AVFoundation
         let data = try! NSURLConnection.sendSynchronousRequest(Request, returningResponse: nil)
         print(data)
         print("oh and null")
-        let jsonbeaconid:NSDictionary! = (try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)) as? NSDictionary //get a data as ictionary
+        let jsonbeaconid:NSDictionary! = (try! NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments)) as? NSDictionary //get a data as dictionary
         if (jsonbeaconid != nil) {
             print(jsonbeaconid)
             return jsonbeaconid
